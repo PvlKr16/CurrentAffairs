@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Topics</h3>
+
+{% for topic in topics %}
+<div class="card mb-3 p-3">
+
+    <h5>{{ topic.title }}</h5>
+
+    <small>
+        {{ topic.created_at|date:"Y-m-d H:i" }}
+        — {{ topic.author }}
+    </small>
+
+    <p>{{ topic.description }}</p>
+
+</div>
+{% empty %}
+<p>No topics yet</p>
+{% endfor %}
+
+{% endblock %}

@@ -16,3 +16,27 @@ body {
 .password-wrapper {
     display: flex;
 }
+
+:root {
+    --bg: #f4f6f5;
+}
+
+[data-theme="emerald"] {
+    --primary: #2ecc71;
+}
+
+[data-theme="ultramarine"] {
+    --primary: #3f51b5;
+}
+
+[data-theme="violet_orange"] {
+    --primary: #9b59b6;
+}
+
+body {
+    background: var(--bg);
+}
+
+.navbar {
+    border-radius: 0 0 10px 10px;
+}
