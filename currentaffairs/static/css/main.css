@@ -1,0 +1,18 @@
+/* Basic soft design */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f5;
+}
+
+/* Login */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 12px;
+}
+
+.password-wrapper {
+    display: flex;
+}
