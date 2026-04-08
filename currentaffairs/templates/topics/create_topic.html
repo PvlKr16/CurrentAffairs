@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Create Topic</h3>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label>Title</label>
+        {{ form.title }}
+    </div>
+
+    <div class="mb-3">
+        <label>Description</label>
+        {{ form.description }}
+    </div>
+
+    <div class="mb-3">
+        <label>Content</label>
+        {{ form.content }}
+    </div>
+
+    <div class="mb-3">
+        <label>Visibility</label>
+        {{ form.is_open }}
+    </div>
+
+    <div class="mb-3">
+        <label>Participants</label>
+        {{ form.participants }}
+    </div>
+
+    <button class="btn btn-success">Save</button>
+    <a href="/home/" class="btn btn-secondary">Cancel</a>
+
+</form>
+
+{% endblock %}

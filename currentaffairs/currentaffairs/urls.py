@@ -25,6 +25,7 @@ urlpatterns = [
     path('', root_redirect),
     path('home/', home_view),
     path('', include('users.urls')),
+    path('', include('topics.urls')),
 ]
 
 if settings.DEBUG:
