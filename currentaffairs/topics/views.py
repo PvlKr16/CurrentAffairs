@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from .forms import TopicCreateForm
 from django.contrib.auth.decorators import login_required
 from .models import Topic
+from django.shortcuts import get_object_or_404
+from comments.models import Comment
+from .models import Topic, TopicReadStatus
+from django.utils import timezone
 
 
 def guest_required(view_func):
@@ -32,3 +36,32 @@ def create_topic(request):
             return redirect('/home/')
 
     return render(request, 'topics/create_topic.html', {'form': form})
+
+def topic_detail(request, topic_id):
+    topic = get_object_or_404(Topic, id=topic_id)
+
+    # Access control
+    if not topic.is_open and request.user not in topic.participants.all():
+        return redirect('/home/')
+
+    comments = topic.comments.all().order_by('created_at')
+
+    # Mark as read
+    TopicReadStatus.objects.update_or_create(
+        user=request.user,
+        topic=topic,
+        defaults={'last_read_at': timezone.now()}
+    )
+
+    return render(request, 'topics/topic_detail.html', {
+        'topic': topic,
+        'comments': comments
+    })
+
+def mark_unread(request, topic_id):
+    TopicReadStatus.objects.filter(
+        user=request.user,
+        topic_id=topic_id
+    ).delete()
+
+    return redirect('/home/')

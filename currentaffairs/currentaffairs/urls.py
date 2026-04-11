@@ -26,6 +26,7 @@ urlpatterns = [
     path('home/', home_view),
     path('', include('users.urls')),
     path('', include('topics.urls')),
+    path('', include('comments.urls')),
 ]
 
 if settings.DEBUG:
