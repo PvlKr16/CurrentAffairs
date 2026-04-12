@@ -3,19 +3,17 @@ from django.db import models
 
 
 class User(AbstractUser):
-    # Email as login field
     email = models.EmailField(unique=True)
 
-    # Additional fields
     is_guest = models.BooleanField(default=False)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
-    # Theme preference
     COLOR_CHOICES = [
         ('emerald', 'Emerald'),
         ('ultramarine', 'Ultramarine'),
         ('violet_orange', 'Violet & Orange'),
     ]
+
     color_scheme = models.CharField(
         max_length=20,
         choices=COLOR_CHOICES,
@@ -23,7 +21,13 @@ class User(AbstractUser):
     )
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = []
+
+    def save(self, *args, **kwargs):
+        # Auto-fill username from email
+        if not self.username:
+            self.username = self.email
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.email

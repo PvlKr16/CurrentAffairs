@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>Unread Topics</h3>
+
+<div class="mb-3">
+    <a href="?sort=oldest" class="btn btn-outline-secondary btn-sm">Oldest</a>
+    <a href="?sort=newest" class="btn btn-outline-secondary btn-sm">Newest</a>
+</div>
+
+{% for topic in topics %}
+<div class="card p-3 mb-2">
+    <a href="/topic/{{ topic.id }}/">{{ topic.title }}</a>
+</div>
+{% empty %}
+<p>No unread topics</p>
+{% endfor %}
+
+{% endblock %}
