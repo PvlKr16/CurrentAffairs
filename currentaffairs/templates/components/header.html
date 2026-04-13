@@ -2,11 +2,30 @@
     <a class="navbar-brand" href="/home/">CurrentAffairs</a>
 
     <!-- Search -->
-    <input class="form-control mx-3" style="max-width:300px;" placeholder="Search...">
+    <form class="d-flex position-relative me-3" action="/search/" method="get">
+        <input
+            id="search-input"
+            class="form-control"
+            type="search"
+            name="q"
+            placeholder="Search..."
+            autocomplete="off"
+        >
 
-    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav">
-        ☰
-    </button>
+        <div id="search-panel" class="search-panel d-none">
+
+            <label><input type="checkbox" name="author"> by author</label><br>
+            <label><input type="checkbox" name="title" checked> in title</label><br>
+            <label><input type="checkbox" name="description" checked> in description</label><br>
+            <label><input type="checkbox" name="content" checked> in content</label><br>
+            <label><input type="checkbox" name="comments"> in comments</label><br>
+            <label><input type="checkbox" name="date"> by date</label><br>
+
+            <button class="btn btn-sm btn-success mt-2 w-100">
+                Search
+            </button>
+        </div>
+    </form>
 
     <div class="collapse navbar-collapse" id="nav">
         <ul class="navbar-nav ms-auto align-items-center">

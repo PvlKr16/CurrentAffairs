@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from .forms import TopicCreateForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q, Max
 from django.shortcuts import get_object_or_404
 from comments.models import Comment
 from .models import Topic, TopicReadStatus
-from django.db.models import Max
 from django.http import JsonResponse
 from django.utils import timezone
 
@@ -128,3 +128,56 @@ def unread_topics_page(request):
         'topics': topics,
         'sort': sort
     })
+
+def search_topics(request):
+    query = request.GET.get('q', '').strip()
+
+    if not query:
+        return redirect('/home/')
+
+    by_author = request.GET.get('author')
+    in_title = request.GET.get('title')
+    in_description = request.GET.get('description')
+    in_content = request.GET.get('content')
+    in_comments = request.GET.get('comments')
+    by_date = request.GET.get('date')
+
+    user = request.user
+
+    # Visible topics
+    if user.is_guest:
+        topics = Topic.objects.filter(participants=user)
+    else:
+        topics = Topic.objects.filter(
+            Q(is_open=True) | Q(participants=user)
+        ).distinct()
+
+    filters = Q()
+
+    if by_author:
+        filters |= Q(author__first_name__icontains=query)
+        filters |= Q(author__last_name__icontains=query)
+        filters |= Q(author__email__icontains=query)
+
+    if in_title:
+        filters |= Q(title__icontains=query)
+
+    if in_description:
+        filters |= Q(description__icontains=query)
+
+    if in_content:
+        filters |= Q(content__icontains=query)
+
+    if in_comments:
+        filters |= Q(comments__content__icontains=query)
+
+    if by_date:
+        filters |= Q(created_at__date=query)
+
+    results = topics.filter(filters).distinct()
+
+    return render(request, 'topics/search_results.html', {
+        'topics': results,
+        'query': query
+    })
+
