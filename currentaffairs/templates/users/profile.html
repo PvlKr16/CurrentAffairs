@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h3>
+    {{ profile_user.first_name }} {{ profile_user.last_name }}
+</h3>
+
+{% if profile_user.avatar %}
+    <img src="{{ profile_user.avatar.url }}"
+         class="rounded-circle mb-3"
+         width="120"
+         height="120">
+{% endif %}
+
+<p>{{ profile_user.email }}</p>
+
+{% if profile_user.is_guest %}
+<p><strong>Guest user</strong></p>
+{% endif %}
+
+{% if is_owner %}
+
+<hr>
+<h5>Change Avatar</h5>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ avatar_form.as_p }}
+    <button class="btn btn-success" name="save_avatar">
+        Save Avatar
+    </button>
+</form>
+
+<hr>
+<h5>Change Password</h5>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label>Old password</label>
+
+        <div class="input-group password-wrapper">
+            {{ password_form.old_password }}
+            <button type="button"
+                    class="btn btn-outline-secondary toggle-password">
+                Show
+            </button>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label>New password</label>
+
+        <div class="input-group password-wrapper">
+            {{ password_form.new_password1 }}
+            <button type="button"
+                    class="btn btn-outline-secondary toggle-password">
+                Show
+            </button>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label>Repeat new password</label>
+
+        <div class="input-group password-wrapper">
+            {{ password_form.new_password2 }}
+            <button type="button"
+                    class="btn btn-outline-secondary toggle-password">
+                Show
+            </button>
+        </div>
+    </div>
+
+    <button class="btn btn-warning" name="change_password">
+        Change Password
+    </button>
+</form>
+
+{% endif %}
+
+{% endblock %}

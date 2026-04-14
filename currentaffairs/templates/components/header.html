@@ -45,7 +45,7 @@
         <ul class="navbar-nav ms-auto align-items-center">
 
             <li class="nav-item">
-                <a class="nav-link" href="#">Contacts</a>
+                <a class="nav-link" href="/contacts/">Contacts</a>
             </li>
 
             <li class="nav-item dropdown">
@@ -57,7 +57,7 @@
             </li>
 
             <li class="nav-item">
-                <span class="nav-link">{{ request.user.first_name }}</span>
+                <a class="nav-link" href="/profile/{{ request.user.id }}/">{{ request.user.first_name }}</a>
             </li>
 
             <li class="nav-item">
