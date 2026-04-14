@@ -59,3 +59,8 @@ body {
     display: block;
     margin-bottom: 4px;
 }
+
+#date-range input {
+    font-size: 13px;
+}
+

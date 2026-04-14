@@ -141,6 +141,8 @@ def search_topics(request):
     in_content = request.GET.get('content')
     in_comments = request.GET.get('comments')
     by_date = request.GET.get('date')
+    date_from = request.GET.get('date_from')
+    date_to = request.GET.get('date_to')
 
     user = request.user
 
@@ -172,7 +174,11 @@ def search_topics(request):
         filters |= Q(comments__content__icontains=query)
 
     if by_date:
-        filters |= Q(created_at__date=query)
+        if date_from:
+            filters &= Q(created_at__gte=date_from)
+
+        if date_to:
+            filters &= Q(created_at__lte=date_to)
 
     results = topics.filter(filters).distinct()
 

@@ -19,7 +19,21 @@
             <label><input type="checkbox" name="description" checked> in description</label><br>
             <label><input type="checkbox" name="content" checked> in content</label><br>
             <label><input type="checkbox" name="comments"> in comments</label><br>
-            <label><input type="checkbox" name="date"> by date</label><br>
+            <label>
+                <input type="checkbox" name="date" id="date-toggle">
+                by date
+            </label>
+
+            <div id="date-range" class="mt-2 d-none">
+                <input type="datetime-local"
+                       name="date_from"
+                       class="form-control form-control-sm mb-2">
+
+                <input type="datetime-local"
+                       name="date_to"
+                       class="form-control form-control-sm">
+            </div>
+            <br>
 
             <button class="btn btn-sm btn-success mt-2 w-100">
                 Search
