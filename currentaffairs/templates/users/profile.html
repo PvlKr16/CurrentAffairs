@@ -43,11 +43,9 @@
 
         <div class="input-group password-wrapper">
             {{ password_form.old_password }}
-            <button type="button"
-                    class="btn btn-outline-secondary toggle-password">
-                Show
-            </button>
+            <button type="button" class="btn btn-outline-secondary password-peek">👁</button>
         </div>
+        <small class="caps-warning text-danger d-none">Caps Lock is ON</small>
     </div>
 
     <div class="mb-3">
@@ -55,11 +53,15 @@
 
         <div class="input-group password-wrapper">
             {{ password_form.new_password1 }}
-            <button type="button"
-                    class="btn btn-outline-secondary toggle-password">
-                Show
-            </button>
+            <button type="button" class="btn btn-outline-secondary password-peek">👁</button>
         </div>
+
+        <small class="caps-warning text-danger d-none">Caps Lock is ON</small>
+
+        <div class="password-strength mt-2">
+            <div class="strength-bar"></div>
+        </div>
+        <small class="strength-text text-muted"></small>
     </div>
 
     <div class="mb-3">
@@ -67,11 +69,9 @@
 
         <div class="input-group password-wrapper">
             {{ password_form.new_password2 }}
-            <button type="button"
-                    class="btn btn-outline-secondary toggle-password">
-                Show
-            </button>
+            <button type="button" class="btn btn-outline-secondary password-peek">👁</button>
         </div>
+        <small class="caps-warning text-danger d-none">Caps Lock is ON</small>
     </div>
 
     <button class="btn btn-warning" name="change_password">
