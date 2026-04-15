@@ -190,6 +190,11 @@ a {
     display: block;
 }
 
+.dropdown-menu .dropdown-item:hover {
+    background: var(--primary);
+    color: #ffffff !important;
+}
+
 .submenu {
     display: none;
     position: absolute;
