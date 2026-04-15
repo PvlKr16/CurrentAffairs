@@ -1,45 +1,135 @@
-/* Basic soft design */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f5;
+/* =========================
+   THEME VARIABLES
+========================= */
+
+:root {
+    --bg: #f4f6f5;
+    --text: #1f2937;
+    --primary: #2ecc71;
+    --primary-dark: #27ae60;
+    --card-bg: #ffffff;
+    --border-color: #dcdcdc;
 }
 
-/* Login */
+/* Emerald */
+html[data-theme="emerald"] {
+    --bg: #f4f6f5;
+    --text: #1f2937;
+    --primary: #2ecc71;
+    --primary-dark: #27ae60;
+    --card-bg: #ffffff;
+    --border-color: #d8e3dc;
+}
+
+/* Ultramarine */
+html[data-theme="ultramarine"] {
+    --bg: #f5f7ff;
+    --text: #1c2541;
+    --primary: #3f51b5;
+    --primary-dark: #303f9f;
+    --card-bg: #ffffff;
+    --border-color: #d6dcff;
+}
+
+/* Violet + Orange */
+html[data-theme="violet_orange"] {
+    --bg: #fff8f2;
+    --text: #3d2c3c;
+    --primary: #8e44ad;
+    --primary-dark: #6c3483;
+    --card-bg: #ffffff;
+    --border-color: #f0d8c0;
+}
+
+/* =========================
+   BASE
+========================= */
+
+body {
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* =========================
+   LOGIN
+========================= */
+
 .login-container {
     max-width: 400px;
     margin: 100px auto;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 12px;
+    padding: 24px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
 }
 
 .password-wrapper {
     display: flex;
+    gap: 0;
 }
 
-:root {
-    --bg: #f4f6f5;
-}
-
-[data-theme="emerald"] {
-    --primary: #2ecc71;
-}
-
-[data-theme="ultramarine"] {
-    --primary: #3f51b5;
-}
-
-[data-theme="violet_orange"] {
-    --primary: #9b59b6;
-}
-
-body {
-    background: var(--bg);
-}
+/* =========================
+   NAVBAR
+========================= */
 
 .navbar {
-    border-radius: 0 0 10px 10px;
+    background: var(--primary) !important;
+    border-radius: 0 0 12px 12px;
 }
+
+/* Top navbar items */
+.navbar > .container a,
+.navbar > .container .btn,
+.navbar > .container .navbar-brand,
+.navbar > .container .nav-link {
+    color: #ffffff !important;
+}
+
+/* Dropdown menu text */
+.dropdown-menu a,
+.dropdown-menu button,
+.dropdown-menu .dropdown-item {
+    color: #212529 !important;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background: var(--primary);
+    color: #ffffff !important;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn-success {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-success:hover,
+.btn-success:focus {
+    background: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
+
+a {
+    color: var(--primary-dark);
+}
+
+/* =========================
+   SEARCH PANEL
+========================= */
 
 .search-panel {
     position: absolute;
@@ -51,7 +141,7 @@ body {
     border-radius: 10px;
     padding: 12px;
     z-index: 2000;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
 }
 
 .search-panel label {
@@ -64,6 +154,10 @@ body {
     font-size: 13px;
 }
 
+/* =========================
+   PASSWORD STRENGTH
+========================= */
+
 .password-strength {
     width: 100%;
     height: 8px;
@@ -75,7 +169,7 @@ body {
 .strength-bar {
     height: 100%;
     width: 0%;
-    transition: 0.25s;
+    transition: 0.25s ease;
 }
 
 .level-1 { background: #dc3545; }
@@ -84,29 +178,36 @@ body {
 .level-4 { background: #20c997; }
 .level-5 { background: #198754; }
 
-/* Bootstrap fallback classes for login page */
+/* =========================
+   SETTINGS MENU
+========================= */
+
+.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu:hover > .submenu {
+    display: block;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 100%;
+    left: auto;
+    min-width: 220px;
+    margin-right: 2px;
+}
+
+/* =========================
+   FALLBACK CLASSES
+========================= */
+
 .d-none {
     display: none !important;
 }
 
 .text-danger {
     color: #dc3545 !important;
-}
-
-.form-control {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 6px;
-}
-
-.btn {
-    padding: 8px 12px;
-    border: 1px solid #ced4da;
-    background: #f8f9fa;
-    cursor: pointer;
-}
-
-.btn-outline-secondary {
-    background: #fff;
 }

@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 from .models import User
 from django import forms
 
@@ -79,3 +81,17 @@ def profile_page(request, user_id):
         'avatar_form': avatar_form,
         'password_form': password_form,
     })
+
+@login_required
+@require_POST
+def change_theme(request):
+    theme = request.POST.get('theme')
+
+    allowed = ['emerald', 'ultramarine', 'violet_orange']
+
+    if theme in allowed:
+        request.user.color_scheme = theme
+        request.user.save()
+        return JsonResponse({'status': 'ok'})
+
+    return JsonResponse({'status': 'error'})

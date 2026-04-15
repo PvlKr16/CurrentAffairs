@@ -73,13 +73,93 @@
                 <a class="nav-link" href="/logout/">Logout</a>
             </li>
 
-            <li class="nav-item dropdown">
-                <a class="nav-link" data-bs-toggle="dropdown">⚙</a>
+            <div class="dropdown">
+
+                <button class="btn btn-link text-decoration-none"
+                        data-bs-toggle="dropdown">
+                    ⚙
+                </button>
+
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#">Colors</a></li>
-                    <li><a class="dropdown-item" href="#">Language</a></li>
+
+                    <li class="dropdown-submenu position-relative">
+                        <a class="dropdown-item" href="#">
+                            Colors ▶
+                        </a>
+
+                        <ul class="dropdown-menu submenu">
+
+                            <li>
+                                <a class="dropdown-item theme-option"
+                                   data-theme="emerald"
+                                   href="#">
+                                    Emerald
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item theme-option"
+                                   data-theme="ultramarine"
+                                   href="#">
+                                    Ultramarine
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item theme-option"
+                                   data-theme="violet_orange"
+                                   href="#">
+                                    Violet & Orange
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
+                    <li><hr class="dropdown-divider"></li>
+
+                    <li>
+                        <form method="post" action="/set-language/">
+                            {% csrf_token %}
+                            <input type="hidden" name="language" value="be">
+                            <button class="dropdown-item">Беларуская</button>
+                        </form>
+                    </li>
+
+                    <li>
+                        <form method="post" action="/set-language/">
+                            {% csrf_token %}
+                            <input type="hidden" name="language" value="en">
+                            <button class="dropdown-item">English</button>
+                        </form>
+                    </li>
+
+                    <li>
+                        <form method="post" action="/set-language/">
+                            {% csrf_token %}
+                            <input type="hidden" name="language" value="it">
+                            <button class="dropdown-item">Italiano</button>
+                        </form>
+                    </li>
+
+                    <li>
+                        <form method="post" action="/set-language/">
+                            {% csrf_token %}
+                            <input type="hidden" name="language" value="lt">
+                            <button class="dropdown-item">Lietuviu</button>
+                        </form>
+                    </li>
+
+                    <li>
+                        <form method="post" action="/set-language/">
+                            {% csrf_token %}
+                            <input type="hidden" name="language" value="ru">
+                            <button class="dropdown-item">Русский</button>
+                        </form>
+                    </li>
+
                 </ul>
-            </li>
+            </div>
 
         </ul>
     </div>
