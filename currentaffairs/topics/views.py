@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
-from .forms import TopicCreateForm
+from .forms import TopicCreateForm, PollForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Max
 from django.shortcuts import get_object_or_404
 from comments.models import Comment
-from .models import Topic, TopicReadStatus
+from .models import Topic, TopicReadStatus, Poll, PollOption, PollVote
 from django.http import JsonResponse
 from django.utils import timezone
 
@@ -187,3 +187,100 @@ def search_topics(request):
         'query': query
     })
 
+@login_required
+def create_poll(request):
+    if request.user.is_guest:
+        return redirect('/home/')
+
+    if request.method == 'POST':
+        form = PollForm(
+            request.POST,
+            request.FILES,
+            user=request.user
+        )
+
+        options = request.POST.getlist('options')
+
+        if form.is_valid():
+            poll = form.save(commit=False)
+            poll.author = request.user
+            poll.save()
+            form.save_m2m()
+
+            poll.participants.add(request.user)
+
+            for text in options:
+                text = text.strip()
+                if text:
+                    PollOption.objects.create(
+                        poll=poll,
+                        text=text
+                    )
+
+            return redirect(f'/poll/{poll.id}/')
+
+    else:
+        form = PollForm(user=request.user)
+
+    return render(request, 'topics/create_poll.html', {
+        'form': form
+    })
+
+
+@login_required
+def view_poll(request, poll_id):
+    poll = get_object_or_404(Poll, id=poll_id)
+
+    if not poll.is_open and request.user not in poll.participants.all():
+        return redirect('/home/')
+
+    voted = PollVote.objects.filter(
+        poll=poll,
+        user=request.user
+    ).exists()
+
+    waiting = poll.participants.exclude(
+        id__in=poll.votes.values_list('user_id', flat=True)
+    )
+
+    return render(request, 'topics/view_poll.html', {
+        'poll': poll,
+        'voted': voted,
+        'waiting': waiting,
+    })
+
+
+@login_required
+def vote_poll(request, poll_id):
+    poll = get_object_or_404(Poll, id=poll_id)
+
+    if not poll.is_open and request.user not in poll.participants.all():
+        return redirect('/home/')
+
+    already = PollVote.objects.filter(
+        poll=poll,
+        user=request.user
+    ).exists()
+
+    if already:
+        return redirect(f'/poll/{poll.id}/')
+
+    selected = request.POST.getlist('options')
+
+    if not poll.allow_multiple:
+        selected = selected[:1]
+
+    for option_id in selected:
+        option = get_object_or_404(
+            PollOption,
+            id=option_id,
+            poll=poll
+        )
+
+        PollVote.objects.create(
+            poll=poll,
+            option=option,
+            user=request.user
+        )
+
+    return redirect(f'/poll/{poll.id}/')

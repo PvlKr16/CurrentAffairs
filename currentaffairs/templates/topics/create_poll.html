@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>New Poll</h3>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <hr>
+
+    <label>Options</label>
+
+    <div id="options-container">
+        <input type="text" name="options" class="form-control mb-2">
+    </div>
+
+    <button type="button"
+            id="add-option"
+            class="btn btn-secondary mb-3">
+        + More option
+    </button>
+
+    <br>
+
+    <button class="btn btn-success">
+        Save Poll
+    </button>
+</form>
+
+{% endblock %}

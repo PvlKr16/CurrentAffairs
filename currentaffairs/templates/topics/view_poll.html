@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h3>{{ poll.question }}</h3>
+
+<p>
+By {{ poll.author.first_name }}
+| {{ poll.created_at|date:"Y-m-d H:i" }}
+</p>
+
+{% if poll.file %}
+<p><a href="{{ poll.file.url }}">Attachment</a></p>
+{% endif %}
+
+{% if not voted %}
+<form method="post" action="/poll/{{ poll.id }}/vote/">
+    {% csrf_token %}
+
+    {% for option in poll.options.all %}
+        <div class="mb-2">
+
+            {% if poll.allow_multiple %}
+                <input type="checkbox"
+                       name="options"
+                       value="{{ option.id }}">
+            {% else %}
+                <input type="radio"
+                       name="options"
+                       value="{{ option.id }}">
+            {% endif %}
+
+            {{ option.text }}
+
+        </div>
+    {% endfor %}
+
+    <button class="btn btn-success">
+        Vote
+    </button>
+</form>
+{% endif %}
+
+<hr>
+
+<h5>Results</h5>
+
+{% for option in poll.options.all %}
+<div class="mb-2">
+    {{ option.text }} —
+    {{ option.pollvote_set.count }}
+</div>
+{% endfor %}
+
+<hr>
+
+<h6>Waiting for answer:</h6>
+
+{% for user in waiting %}
+    {{ user.first_name }} {{ user.last_name }}<br>
+{% empty %}
+    Everyone voted
+{% endfor %}
+
+{% endblock %}
