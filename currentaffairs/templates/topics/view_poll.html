@@ -1,64 +1,100 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h3>{{ poll.question }}</h3>
+<div class="card p-4">
 
-<p>
-By {{ poll.author.first_name }}
-| {{ poll.created_at|date:"Y-m-d H:i" }}
-</p>
+    <div class="d-flex justify-content-between align-items-center">
+        <h3>{{ poll.question }}</h3>
 
-{% if poll.file %}
-<p><a href="{{ poll.file.url }}">Attachment</a></p>
-{% endif %}
+        <span id="poll-status"
+              class="badge bg-success d-none">
+            Completed
+        </span>
+    </div>
 
-{% if not voted %}
-<form method="post" action="/poll/{{ poll.id }}/vote/">
-    {% csrf_token %}
+    <p class="text-muted">
+        By {{ poll.author.first_name }}
+        | {{ poll.created_at|date:"Y-m-d H:i" }}
+    </p>
 
-    {% for option in poll.options.all %}
-        <div class="mb-2">
+    {% if poll.file %}
+        <p>
+            <a href="{{ poll.file.url }}">
+                Attachment
+            </a>
+        </p>
+    {% endif %}
 
-            {% if poll.allow_multiple %}
-                <input type="checkbox"
-                       name="options"
-                       value="{{ option.id }}">
-            {% else %}
-                <input type="radio"
-                       name="options"
-                       value="{{ option.id }}">
-            {% endif %}
+    {% if not voted %}
+    <form method="post"
+          action="/poll/{{ poll.id }}/vote/"
+          class="mb-4">
 
-            {{ option.text }}
+        {% csrf_token %}
+
+        {% for option in poll.options.all %}
+            <div class="form-check mb-2">
+
+                {% if poll.allow_multiple %}
+                    <input class="form-check-input"
+                           type="checkbox"
+                           name="options"
+                           value="{{ option.id }}">
+                {% else %}
+                    <input class="form-check-input"
+                           type="radio"
+                           name="options"
+                           value="{{ option.id }}">
+                {% endif %}
+
+                <label class="form-check-label">
+                    {{ option.text }}
+                </label>
+            </div>
+        {% endfor %}
+
+        <button class="btn btn-success">
+            Vote
+        </button>
+    </form>
+    {% endif %}
+
+    <hr>
+
+    <h5>Results</h5>
+
+    <div id="poll-results">
+
+        {% for option in poll.options.all %}
+        <div class="mb-3 result-item"
+             data-id="{{ option.id }}">
+
+            <div class="d-flex justify-content-between">
+                <span>{{ option.text }}</span>
+                <span class="result-count">0</span>
+            </div>
+
+            <div class="progress">
+                <div class="progress-bar"
+                     style="width:0%"></div>
+            </div>
 
         </div>
-    {% endfor %}
+        {% endfor %}
 
-    <button class="btn btn-success">
-        Vote
-    </button>
-</form>
-{% endif %}
+    </div>
 
-<hr>
+    <hr>
 
-<h5>Results</h5>
+    <div id="waiting-box">
+        <h6>Waiting for answer:</h6>
+        <div id="waiting-list"></div>
+    </div>
 
-{% for option in poll.options.all %}
-<div class="mb-2">
-    {{ option.text }} —
-    {{ option.pollvote_set.count }}
 </div>
-{% endfor %}
 
-<hr>
-
-<h6>Waiting for answer:</h6>
-
-{% for user in waiting %}
-    {{ user.first_name }} {{ user.last_name }}<br>
-{% empty %}
-    Everyone voted
-{% endfor %}
+<script>
+    window.POLL_ID = {{ poll.id }};
+</script>
 
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import (create_topic, topic_detail, mark_unread, unread_count_api, unread_topics_page, search_topics,
-                    create_poll, view_poll, vote_poll)
+                    create_poll, view_poll, vote_poll, poll_results_api)
 
 urlpatterns = [
     path('topic/new/', create_topic),
@@ -12,4 +12,5 @@ urlpatterns = [
     path('poll/new/', create_poll),
     path('poll/<int:poll_id>/', view_poll),
     path('poll/<int:poll_id>/vote/', vote_poll),
+    path('poll/<int:poll_id>/results/', poll_results_api),
 ]

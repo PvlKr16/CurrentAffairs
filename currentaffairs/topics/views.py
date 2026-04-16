@@ -1,12 +1,19 @@
-from django.shortcuts import render, redirect
-from .forms import TopicCreateForm, PollForm
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q, Max
-from django.shortcuts import get_object_or_404
-from comments.models import Comment
-from .models import Topic, TopicReadStatus, Poll, PollOption, PollVote
+from django.db.models import Q
 from django.http import JsonResponse
 from django.utils import timezone
+
+from comments.models import Comment
+from .forms import TopicCreateForm, PollForm
+from .models import (
+    Topic,
+    TopicReadStatus,
+    Poll,
+    PollOption,
+    PollVote,
+    PollReadStatus,
+)
 
 
 def guest_required(view_func):
@@ -15,7 +22,6 @@ def guest_required(view_func):
             return redirect('/home/')
         return view_func(request, *args, **kwargs)
     return wrapper
-
 
 
 @login_required
@@ -34,7 +40,7 @@ def create_topic(request):
             # Author is always participant
             topic.participants.add(request.user)
 
-            # Mark topic as read for author immediately
+            # Mark as read for author immediately
             TopicReadStatus.objects.update_or_create(
                 user=request.user,
                 topic=topic,
@@ -43,18 +49,20 @@ def create_topic(request):
 
             return redirect('/home/')
 
-    return render(request, 'topics/create_topic.html', {'form': form})
+    return render(request, 'topics/create_topic.html', {
+        'form': form
+    })
 
+
+@login_required
 def topic_detail(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
 
-    # Access control
     if not topic.is_open and request.user not in topic.participants.all():
         return redirect('/home/')
 
     comments = topic.comments.all().order_by('created_at')
 
-    # Mark as read
     TopicReadStatus.objects.update_or_create(
         user=request.user,
         topic=topic,
@@ -66,6 +74,8 @@ def topic_detail(request, topic_id):
         'comments': comments
     })
 
+
+@login_required
 def mark_unread(request, topic_id):
     TopicReadStatus.objects.filter(
         user=request.user,
@@ -74,13 +84,19 @@ def mark_unread(request, topic_id):
 
     return redirect('/home/')
 
+
+# ==================================================
+# UNREAD LOGIC
+# ==================================================
+
 def get_unread_topics_for_user(user):
     if not user.is_authenticated:
-        return Topic.objects.none()
+        return []
 
+    unread = []
+
+    # ---------------- Topics ----------------
     topics = Topic.objects.filter(participants=user)
-
-    unread_ids = []
 
     for topic in topics:
         status = TopicReadStatus.objects.filter(
@@ -95,40 +111,91 @@ def get_unread_topics_for_user(user):
             latest_activity = latest_comment.created_at
 
         if not status:
-            unread_ids.append(topic.id)
+            unread.append({
+                'type': 'topic',
+                'obj': topic,
+                'title': topic.title,
+                'updated': latest_activity,
+            })
+
         elif latest_activity > status.last_read_at:
-            # Ignore own comment
             if latest_comment and latest_comment.author == user:
                 continue
-            unread_ids.append(topic.id)
 
-    return Topic.objects.filter(id__in=unread_ids)
+            unread.append({
+                'type': 'topic',
+                'obj': topic,
+                'title': topic.title,
+                'updated': latest_activity,
+            })
 
+    # ---------------- Polls ----------------
+    polls = Poll.objects.filter(participants=user)
+
+    for poll in polls:
+        status = PollReadStatus.objects.filter(
+            user=user,
+            poll=poll
+        ).first()
+
+        last_vote = poll.votes.exclude(
+            user=user
+        ).order_by('-created_at').first()
+
+        latest_activity = poll.created_at
+        if last_vote:
+            latest_activity = last_vote.created_at
+
+        if not status:
+            unread.append({
+                'type': 'poll',
+                'obj': poll,
+                'title': f'POLL: {poll.question}',
+                'updated': latest_activity,
+            })
+
+        elif latest_activity > status.last_read_at:
+            unread.append({
+                'type': 'poll',
+                'obj': poll,
+                'title': f'POLL: {poll.question}',
+                'updated': latest_activity,
+            })
+
+    return unread
+
+
+@login_required
 def unread_count_api(request):
     unread = get_unread_topics_for_user(request.user)
+
     return JsonResponse({
-        'count': unread.count()
+        'count': len(unread)
     })
 
+
+@login_required
 def unread_topics_page(request):
-    topics = get_unread_topics_for_user(request.user)
+    items = get_unread_topics_for_user(request.user)
 
     sort = request.GET.get('sort', 'newest')
 
-    topics = list(topics)
-
-    topics.sort(
-        key=lambda t: t.comments.order_by('-created_at').first().created_at
-        if t.comments.exists()
-        else t.created_at,
+    items.sort(
+        key=lambda x: x['updated'],
         reverse=(sort == 'newest')
     )
 
     return render(request, 'topics/unread_topics.html', {
-        'topics': topics,
+        'items': items,
         'sort': sort
     })
 
+
+# ==================================================
+# SEARCH
+# ==================================================
+
+@login_required
 def search_topics(request):
     query = request.GET.get('q', '').strip()
 
@@ -146,7 +213,6 @@ def search_topics(request):
 
     user = request.user
 
-    # Visible topics
     if user.is_guest:
         topics = Topic.objects.filter(participants=user)
     else:
@@ -187,6 +253,11 @@ def search_topics(request):
         'query': query
     })
 
+
+# ==================================================
+# POLLS
+# ==================================================
+
 @login_required
 def create_poll(request):
     if request.user.is_guest:
@@ -205,9 +276,18 @@ def create_poll(request):
             poll = form.save(commit=False)
             poll.author = request.user
             poll.save()
+
             form.save_m2m()
 
+            # Author is always participant
             poll.participants.add(request.user)
+
+            # Mark as read for author immediately
+            PollReadStatus.objects.update_or_create(
+                user=request.user,
+                poll=poll,
+                defaults={'last_read_at': timezone.now()}
+            )
 
             for text in options:
                 text = text.strip()
@@ -233,6 +313,12 @@ def view_poll(request, poll_id):
 
     if not poll.is_open and request.user not in poll.participants.all():
         return redirect('/home/')
+
+    PollReadStatus.objects.update_or_create(
+        user=request.user,
+        poll=poll,
+        defaults={'last_read_at': timezone.now()}
+    )
 
     voted = PollVote.objects.filter(
         poll=poll,
@@ -283,4 +369,48 @@ def vote_poll(request, poll_id):
             user=request.user
         )
 
+    # Own vote must not create unread
+    PollReadStatus.objects.update_or_create(
+        user=request.user,
+        poll=poll,
+        defaults={'last_read_at': timezone.now()}
+    )
+
     return redirect(f'/poll/{poll.id}/')
+
+
+@login_required
+def poll_results_api(request, poll_id):
+    poll = get_object_or_404(Poll, id=poll_id)
+
+    data = []
+
+    for option in poll.options.all():
+        count = PollVote.objects.filter(
+            poll=poll,
+            option=option
+        ).count()
+
+        data.append({
+            'id': option.id,
+            'text': option.text,
+            'count': count,
+        })
+
+    total_users = poll.participants.count()
+    voted_users = poll.votes.values('user').distinct().count()
+
+    completed = total_users > 0 and voted_users >= total_users
+
+    waiting = list(
+        poll.participants.exclude(
+            id__in=poll.votes.values_list('user_id', flat=True)
+        ).values_list('first_name', 'last_name')
+    )
+
+    return JsonResponse({
+        'results': data,
+        'completed': completed,
+        'waiting': waiting,
+        'anonymous': poll.is_anonymous,
+    })

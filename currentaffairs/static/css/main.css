@@ -216,3 +216,19 @@ a {
 .text-danger {
     color: #dc3545 !important;
 }
+
+.progress {
+    height: 24px;
+    background: #e9ecef;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background: var(--primary);
+    color: #fff;
+    font-size: 12px;
+    line-height: 24px;
+    text-align: center;
+    transition: width 0.4s ease;
+}

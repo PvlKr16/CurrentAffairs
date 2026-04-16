@@ -4,23 +4,28 @@
 
 <h3>Topics</h3>
 
-{% for topic in topics %}
-<div class="card mb-3 p-3">
+{% for item in items %}
 
-    <h5>
-        <a href="/topic/{{ topic.id }}/">{{ topic.title }}</a>
-    </h5>
+<div class="card p-3 mb-3">
 
-    <small>
-        {{ topic.created_at|date:"Y-m-d H:i" }}
-        — {{ topic.author }}
-    </small>
+    {% if item.type == 'topic' %}
+        <a href="/topic/{{ item.obj.id }}/">
+            <strong>{{ item.title }}</strong>
+        </a>
+    {% else %}
+        <a href="/poll/{{ item.obj.id }}/">
+            <strong>{{ item.title }}</strong>
+        </a>
+    {% endif %}
 
-    <p>{{ topic.description }}</p>
+    <div class="small text-muted mt-2">
+        {{ item.updated|date:"Y-m-d H:i" }}
+    </div>
 
 </div>
+
 {% empty %}
-<p>No topics yet</p>
+<p>No content</p>
 {% endfor %}
 
 {% endblock %}

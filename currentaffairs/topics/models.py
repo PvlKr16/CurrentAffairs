@@ -101,3 +101,22 @@ class PollVote(models.Model):
 
     class Meta:
         unique_together = ('poll', 'option', 'user')
+
+
+class PollReadStatus(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    poll = models.ForeignKey(
+        Poll,
+        on_delete=models.CASCADE
+    )
+
+    last_read_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    class Meta:
+        unique_together = ('user', 'poll')

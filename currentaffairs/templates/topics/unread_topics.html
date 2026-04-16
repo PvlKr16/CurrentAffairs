@@ -1,20 +1,44 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
-<h3>Unread Topics</h3>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Unread</h3>
 
-<div class="mb-3">
-    <a href="?sort=oldest" class="btn btn-outline-secondary btn-sm">Oldest</a>
-    <a href="?sort=newest" class="btn btn-outline-secondary btn-sm">Newest</a>
+    <div>
+        <a href="?sort=oldest"
+           class="btn btn-sm btn-outline-secondary">
+            oldest
+        </a>
+
+        <a href="?sort=newest"
+           class="btn btn-sm btn-outline-secondary">
+            newest
+        </a>
+    </div>
 </div>
 
-{% for topic in topics %}
-<div class="card p-3 mb-2">
-    <a href="/topic/{{ topic.id }}/">{{ topic.title }}</a>
+{% for item in items %}
+
+<div class="card p-3 mb-3">
+
+    {% if item.type == 'topic' %}
+        <a href="/topic/{{ item.obj.id }}/">
+            <strong>{{ item.title }}</strong>
+        </a>
+    {% else %}
+        <a href="/poll/{{ item.obj.id }}/">
+            <strong>{{ item.title }}</strong>
+        </a>
+    {% endif %}
+
+    <div class="small text-muted mt-2">
+        {{ item.updated|date:"Y-m-d H:i" }}
+    </div>
+
 </div>
+
 {% empty %}
-<p>No unread topics</p>
+<p>No unread items</p>
 {% endfor %}
 
 {% endblock %}
