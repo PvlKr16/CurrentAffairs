@@ -1,0 +1,45 @@
+{% load file_extras %}
+
+{% if file %}
+
+<div class="file-card mt-2">
+
+    {% with file|ext as extension %}
+
+        {% if extension in '.jpg,.jpeg,.png,.gif,.webp,.svg' %}
+            <a href="{{ file.url }}" target="_blank">
+                <img src="{{ file.url }}"
+                     class="file-thumb">
+            </a>
+
+        {% elif extension == '.pdf' %}
+            <a href="{{ file.url }}" target="_blank"
+               class="file-icon">📄 PDF</a>
+
+        {% elif extension == '.doc' or extension == '.docx' %}
+            <a href="{{ file.url }}" target="_blank"
+               class="file-icon">📝 DOC</a>
+
+        {% elif extension == '.xls' or extension == '.xlsx' %}
+            <a href="{{ file.url }}" target="_blank"
+               class="file-icon">📊 XLS</a>
+
+        {% elif extension == '.zip' or extension == '.rar' %}
+            <a href="{{ file.url }}" target="_blank"
+               class="file-icon">🗜 ZIP</a>
+
+        {% else %}
+            <a href="{{ file.url }}" target="_blank"
+               class="file-icon">📎 File</a>
+        {% endif %}
+
+    {% endwith %}
+
+    <div class="small mt-1">
+        {{ file|filename }}
+        ({{ file.size|filesizeformat }})
+    </div>
+
+</div>
+
+{% endif %}

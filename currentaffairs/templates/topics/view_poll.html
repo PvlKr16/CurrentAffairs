@@ -17,13 +17,7 @@
         | {{ poll.created_at|date:"Y-m-d H:i" }}
     </p>
 
-    {% if poll.file %}
-        <p>
-            <a href="{{ poll.file.url }}">
-                Attachment
-            </a>
-        </p>
-    {% endif %}
+    {% include 'includes/file_preview.html' with file=poll.file %}
 
     {% if not voted %}
     <form method="post"

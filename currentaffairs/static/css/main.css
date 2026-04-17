@@ -272,3 +272,33 @@ a {
     border-color: var(--primary);
     background: rgba(0,0,0,.05);
 }
+
+/* =========================
+   FILES PREVIEW
+========================= */
+
+.file-card {
+    display: inline-block;
+    max-width: 220px;
+}
+
+.file-thumb {
+    max-width: 180px;
+    max-height: 140px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    object-fit: cover;
+}
+
+.file-icon {
+    display: inline-block;
+    padding: 14px 18px;
+    border-radius: 12px;
+    background: rgba(0,0,0,.04);
+    text-decoration: none;
+    color: inherit;
+}
+
+.file-icon:hover {
+    background: rgba(0,0,0,.08);
+}

@@ -23,12 +23,7 @@
     {{ topic.content|linebreaks }}
 </div>
 
-{% if topic.file %}
-<hr>
-<a href="{{ topic.file.url }}" target="_blank">
-    {{ topic.file.name }}
-</a>
-{% endif %}
+{% include 'includes/file_preview.html' with file=topic.file %}
 
 <hr>
 
@@ -60,11 +55,7 @@
         {{ comment.content|linebreaks }}
     </div>
 
-    {% if comment.file %}
-    <a href="{{ comment.file.url }}" target="_blank">
-        {{ comment.file.name }}
-    </a>
-    {% endif %}
+    {% include 'includes/file_preview.html' with file=comment.file %}
 
 </div>
 {% empty %}
