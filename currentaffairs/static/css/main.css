@@ -253,3 +253,22 @@ a {
 .quote-popup:hover {
     opacity: .9;
 }
+
+/* =========================
+   DRAG & DROP
+========================= */
+
+.drop-zone {
+    border: 2px dashed #bbb;
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: .2s;
+    background: rgba(0,0,0,.02);
+}
+
+.drop-zone.dragover {
+    border-color: var(--primary);
+    background: rgba(0,0,0,.05);
+}

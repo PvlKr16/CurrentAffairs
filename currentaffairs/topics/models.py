@@ -22,6 +22,12 @@ class Topic(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    file = models.FileField(
+        upload_to='topics/',
+        blank=True,
+        null=True
+    )
+
     def __str__(self):
         return self.title
 

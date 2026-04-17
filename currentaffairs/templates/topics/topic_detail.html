@@ -23,6 +23,13 @@
     {{ topic.content|linebreaks }}
 </div>
 
+{% if topic.file %}
+<hr>
+<a href="{{ topic.file.url }}" target="_blank">
+    {{ topic.file.name }}
+</a>
+{% endif %}
+
 <hr>
 
 <a href="/topic/{{ topic.id }}/comment/" class="btn btn-primary">
@@ -52,6 +59,12 @@
     <div class="selectable-text">
         {{ comment.content|linebreaks }}
     </div>
+
+    {% if comment.file %}
+    <a href="{{ comment.file.url }}" target="_blank">
+        {{ comment.file.name }}
+    </a>
+    {% endif %}
 
 </div>
 {% empty %}

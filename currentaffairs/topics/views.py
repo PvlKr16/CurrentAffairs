@@ -27,7 +27,11 @@ def guest_required(view_func):
 @login_required
 @guest_required
 def create_topic(request):
-    form = TopicCreateForm(request.POST or None, user=request.user)
+    form = TopicCreateForm(
+        request.POST or None,
+        request.FILES or None,
+        user=request.user
+    )
 
     if request.method == 'POST':
         if form.is_valid():

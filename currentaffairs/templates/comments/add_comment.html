@@ -3,16 +3,35 @@
 
 <h3>Add comment</h3>
 
-<form method="post" enctype="multipart/form-data">
+<form method="post"
+      enctype="multipart/form-data"
+      id="upload-form">
+
     {% csrf_token %}
 
-    {{ form.as_p }}
+    {{ form.title.label_tag }}
+    {{ form.title }}
+
+    {{ form.content.label_tag }}
+    {{ form.content }}
+
+    <div class="mb-3 mt-3">
+        <label>Attachment</label>
+        {{ form.file }}
+
+        <div id="drop-zone" class="drop-zone mt-2">
+            Drag & Drop file here
+        </div>
+
+        <div id="preview-box" class="mt-2"></div>
+    </div>
 
     <button class="btn btn-success">
         Save comment
     </button>
 
-    <a href="/topic/{{ topic.id }}/" class="btn btn-secondary">
+    <a href="/topic/{{ topic.id }}/"
+       class="btn btn-secondary">
         Cancel
     </a>
 </form>
