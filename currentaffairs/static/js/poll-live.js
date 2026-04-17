@@ -30,6 +30,7 @@ function loadResults() {
 
                 const count = row.querySelector('.result-count');
                 const bar = row.querySelector('.progress-bar');
+                const usersBox = row.querySelector('.vote-users');
 
                 count.textContent = item.count;
 
@@ -39,33 +40,45 @@ function loadResults() {
 
                 bar.style.width = percent + '%';
                 bar.textContent = Math.round(percent) + '%';
+
+                // Users list for non-anonymous poll
+                usersBox.innerHTML = '';
+
+                if (!data.anonymous && item.users.length > 0) {
+                    item.users.forEach(user => {
+                        usersBox.innerHTML +=
+                            user[0] + ' ' + user[1] + '<br>';
+                    });
+                }
+
             });
 
-            // Completed
             const badge = document.getElementById('poll-status');
 
             if (data.completed) {
                 badge.classList.remove('d-none');
             }
 
-            // Waiting list
-            const waitingBox = document.getElementById('waiting-list');
+            const waitingBox = document.getElementById('waiting-box');
+            const waitingList = document.getElementById('waiting-list');
 
-            if (!data.completed) {
-                waitingBox.innerHTML = '';
+            if (data.completed) {
+                waitingBox.style.display = 'none';
+            } else {
+                waitingBox.style.display = 'block';
+                waitingList.innerHTML = '';
 
                 data.waiting.forEach(user => {
-                    waitingBox.innerHTML +=
+                    waitingList.innerHTML +=
                         user[0] + ' ' + user[1] + '<br>';
                 });
-            } else {
-                waitingBox.innerHTML = 'Everyone voted';
             }
 
-            // Anonymous
-            if (data.anonymous) {
-                document.querySelector('#waiting-box h6')
-                    .textContent = 'Anonymous poll';
+            if (data.anonymous && !data.completed) {
+                const title = waitingBox.querySelector('h6');
+                if (title) {
+                    title.textContent = 'Anonymous poll';
+                }
             }
 
         });

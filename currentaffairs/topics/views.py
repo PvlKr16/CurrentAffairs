@@ -386,15 +386,29 @@ def poll_results_api(request, poll_id):
     data = []
 
     for option in poll.options.all():
-        count = PollVote.objects.filter(
+
+        votes = PollVote.objects.filter(
             poll=poll,
             option=option
-        ).count()
+        )
+
+        count = votes.count()
+
+        users = []
+
+        if not poll.is_anonymous:
+            users = list(
+                votes.select_related('user').values_list(
+                    'user__first_name',
+                    'user__last_name'
+                )
+            )
 
         data.append({
             'id': option.id,
             'text': option.text,
             'count': count,
+            'users': users,
         })
 
     total_users = poll.participants.count()
