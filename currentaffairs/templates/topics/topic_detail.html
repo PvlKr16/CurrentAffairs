@@ -66,4 +66,63 @@
     window.TOPIC_ID = {{ topic.id }};
 </script>
 
+<hr>
+
+<div class="row mt-4">
+
+    <div class="col-lg-4 order-lg-2">
+        <div class="card p-3">
+
+            <h5>Participants</h5>
+
+            {% for user in topic.participants.all %}
+                <div class="d-flex justify-content-between align-items-center mb-2">
+
+                    <a href="/profile/{{ user.id }}/">
+                        {{ user.first_name }} {{ user.last_name }}
+                        {% if user.is_guest %}(guest){% endif %}
+                    </a>
+
+                    {% if user == request.user and user != topic.author %}
+                        <a href="/topic/{{ topic.id }}/leave/"
+                           class="btn btn-sm btn-outline-danger">
+                            Leave
+                        </a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            {% if request.user in topic.participants.all %}
+            <hr>
+
+            <form method="post"
+                  action="/topic/{{ topic.id }}/add-user/">
+
+                {% csrf_token %}
+
+                <select name="user_id"
+                        class="form-select mb-2">
+
+                    {% for user in users %}
+                        {% if user not in topic.participants.all %}
+                        <option value="{{ user.id }}">
+                            {{ user.first_name }} {{ user.last_name }}
+                            {% if user.is_guest %}(guest){% endif %}
+                        </option>
+                        {% endif %}
+                    {% endfor %}
+
+                </select>
+
+                <button class="btn btn-success btn-sm w-100">
+                    Add participant
+                </button>
+            </form>
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
 {% endblock %}

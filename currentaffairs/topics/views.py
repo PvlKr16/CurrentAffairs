@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.http import JsonResponse
 from django.utils import timezone
@@ -15,6 +16,7 @@ from .models import (
     PollReadStatus,
 )
 
+User = get_user_model()
 
 def guest_required(view_func):
     def wrapper(request, *args, **kwargs):
@@ -75,7 +77,8 @@ def topic_detail(request, topic_id):
 
     return render(request, 'topics/topic_detail.html', {
         'topic': topic,
-        'comments': comments
+        'comments': comments,
+        'users': User.objects.exclude(id=request.user.id),
     })
 
 
@@ -337,6 +340,7 @@ def view_poll(request, poll_id):
         'poll': poll,
         'voted': voted,
         'waiting': waiting,
+        'users': User.objects.exclude(id=request.user.id),
     })
 
 
@@ -432,3 +436,58 @@ def poll_results_api(request, poll_id):
         'waiting': waiting,
         'anonymous': poll.is_anonymous,
     })
+
+# Participants
+
+@login_required
+def add_topic_participant(request, topic_id):
+    topic = get_object_or_404(Topic, id=topic_id)
+
+    if request.user not in topic.participants.all():
+        return redirect(f'/topic/{topic.id}/')
+
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+
+        if user_id:
+            user = get_object_or_404(User, id=user_id)
+            topic.participants.add(user)
+
+    return redirect(f'/topic/{topic.id}/')
+
+
+@login_required
+def leave_topic(request, topic_id):
+    topic = get_object_or_404(Topic, id=topic_id)
+
+    if request.user != topic.author:
+        topic.participants.remove(request.user)
+
+    return redirect('/home/')
+
+
+@login_required
+def add_poll_participant(request, poll_id):
+    poll = get_object_or_404(Poll, id=poll_id)
+
+    if request.user not in poll.participants.all():
+        return redirect(f'/poll/{poll.id}/')
+
+    if request.method == 'POST':
+        user_id = request.POST.get('user_id')
+
+        if user_id:
+            user = get_object_or_404(User, id=user_id)
+            poll.participants.add(user)
+
+    return redirect(f'/poll/{poll.id}/')
+
+
+@login_required
+def leave_poll(request, poll_id):
+    poll = get_object_or_404(Poll, id=poll_id)
+
+    if request.user != poll.author:
+        poll.participants.remove(request.user)
+
+    return redirect('/home/')

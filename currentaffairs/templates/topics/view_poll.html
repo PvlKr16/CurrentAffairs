@@ -22,34 +22,39 @@
     {% if not voted %}
     <form method="post"
           action="/poll/{{ poll.id }}/vote/"
-          class="mb-4">
+          class="mb-4 mt-3">
 
         {% csrf_token %}
 
         {% for option in poll.options.all %}
-            <div class="form-check mb-2">
+        <div class="form-check mb-2">
 
-                {% if poll.allow_multiple %}
-                    <input class="form-check-input"
-                           type="checkbox"
-                           name="options"
-                           value="{{ option.id }}">
-                {% else %}
-                    <input class="form-check-input"
-                           type="radio"
-                           name="options"
-                           value="{{ option.id }}">
-                {% endif %}
+            {% if poll.allow_multiple %}
+                <input class="form-check-input"
+                       type="checkbox"
+                       name="options"
+                       value="{{ option.id }}"
+                       id="option{{ option.id }}">
+            {% else %}
+                <input class="form-check-input"
+                       type="radio"
+                       name="options"
+                       value="{{ option.id }}"
+                       id="option{{ option.id }}">
+            {% endif %}
 
-                <label class="form-check-label">
-                    {{ option.text }}
-                </label>
-            </div>
+            <label class="form-check-label"
+                   for="option{{ option.id }}">
+                {{ option.text }}
+            </label>
+
+        </div>
         {% endfor %}
 
-        <button class="btn btn-success">
+        <button class="btn btn-success mt-2">
             Vote
         </button>
+
     </form>
     {% endif %}
 
@@ -70,7 +75,8 @@
 
             <div class="progress mb-2">
                 <div class="progress-bar"
-                     style="width:0%"></div>
+                     style="width:0%">
+                </div>
             </div>
 
             <div class="vote-users small text-muted"></div>
@@ -85,6 +91,61 @@
     <div id="waiting-box">
         <h6>Waiting for answer:</h6>
         <div id="waiting-list"></div>
+    </div>
+
+    <hr>
+
+    <div class="card p-3 mt-4">
+
+        <h5>Participants</h5>
+
+        {% for user in poll.participants.all %}
+        <div class="d-flex justify-content-between align-items-center mb-2">
+
+            <a href="/profile/{{ user.id }}/">
+                {{ user.first_name }} {{ user.last_name }}
+                {% if user.is_guest %}(guest){% endif %}
+            </a>
+
+            {% if user == request.user and user != poll.author %}
+            <a href="/poll/{{ poll.id }}/leave/"
+               class="btn btn-sm btn-outline-danger">
+                Leave
+            </a>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+
+        {% if request.user in poll.participants.all %}
+        <hr>
+
+        <form method="post"
+              action="/poll/{{ poll.id }}/add-user/">
+
+            {% csrf_token %}
+
+            <select name="user_id"
+                    class="form-select mb-2">
+
+                {% for user in users %}
+                    {% if user not in poll.participants.all %}
+                    <option value="{{ user.id }}">
+                        {{ user.first_name }} {{ user.last_name }}
+                        {% if user.is_guest %}(guest){% endif %}
+                    </option>
+                    {% endif %}
+                {% endfor %}
+
+            </select>
+
+            <button class="btn btn-success btn-sm w-100">
+                Add participant
+            </button>
+
+        </form>
+        {% endif %}
+
     </div>
 
 </div>
