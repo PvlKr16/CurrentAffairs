@@ -1,15 +1,20 @@
 {% extends 'base.html' %}
-
 {% block content %}
 
-<h3>Add Comment</h3>
+<h3>Add comment</h3>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
     {{ form.as_p }}
 
-    <button class="btn btn-success">Save</button>
+    <button class="btn btn-success">
+        Save comment
+    </button>
+
+    <a href="/topic/{{ topic.id }}/" class="btn btn-secondary">
+        Cancel
+    </a>
 </form>
 
 {% endblock %}

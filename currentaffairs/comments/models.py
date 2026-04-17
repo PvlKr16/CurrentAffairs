@@ -15,5 +15,11 @@ class Comment(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+    file = models.FileField(
+        upload_to='comments/',
+        blank=True,
+        null=True
+    )
+
     def __str__(self):
         return f"{self.author} - {self.topic}"

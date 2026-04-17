@@ -2,9 +2,13 @@
 
 {% block content %}
 
+<div id="quote-popup" class="quote-popup d-none">
+    Quote
+</div>
+
 <h3>{{ topic.title }}</h3>
 
-<p>
+<p class="text-muted">
     {{ topic.author }} |
     {{ topic.created_at|date:"Y-m-d H:i" }}
 </p>
@@ -15,7 +19,9 @@
 
 <hr>
 
-<p>{{ topic.content }}</p>
+<div class="selectable-text">
+    {{ topic.content|linebreaks }}
+</div>
 
 <hr>
 
@@ -32,18 +38,28 @@
 <h5>Comments</h5>
 
 {% for comment in comments %}
-<div class="card mb-2 p-2">
-    <strong>{{ comment.author }}</strong>
-    <small>{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+<div class="card mb-3 p-3">
+
+    <div class="d-flex justify-content-between">
+        <strong>{{ comment.author }}</strong>
+        <small>{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+    </div>
 
     {% if comment.title %}
-        <h6>{{ comment.title }}</h6>
+        <h6 class="mt-2">{{ comment.title }}</h6>
     {% endif %}
 
-    <p>{{ comment.content }}</p>
+    <div class="selectable-text">
+        {{ comment.content|linebreaks }}
+    </div>
+
 </div>
 {% empty %}
 <p>No comments yet</p>
 {% endfor %}
+
+<script>
+    window.TOPIC_ID = {{ topic.id }};
+</script>
 
 {% endblock %}

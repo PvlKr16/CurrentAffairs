@@ -232,3 +232,24 @@ a {
     text-align: center;
     transition: width 0.4s ease;
 }
+
+/* =========================
+   QUOTE
+========================= */
+
+.quote-popup {
+    position: absolute;
+    z-index: 9999;
+    background: var(--primary);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,.15);
+    user-select: none;
+}
+
+.quote-popup:hover {
+    opacity: .9;
+}
