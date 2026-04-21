@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
 from .forms import CommentForm
+from .models import Comment
 from topics.models import Topic, TopicReadStatus
 
 
@@ -10,11 +11,15 @@ from topics.models import Topic, TopicReadStatus
 def add_comment(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
 
-    initial = {}
-    quote = request.GET.get('quote', '').strip()
+    # Only participants see closed topic
+    if not topic.is_open and request.user not in topic.participants.all():
+        return redirect('/home/')
 
+    initial = {}
+
+    quote = request.GET.get('quote', '').strip()
     if quote:
-        initial['title'] = quote[:255]
+        initial['content'] = f'> {quote}\n\n'
 
     form = CommentForm(
         request.POST or None,
@@ -25,10 +30,14 @@ def add_comment(request, topic_id):
     if request.method == 'POST':
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.author = request.user
             comment.topic = topic
+            comment.author = request.user
             comment.save()
 
+            # User is added to participants after he added comment
+            topic.participants.add(request.user)
+
+            # Topic is marked as read at once
             TopicReadStatus.objects.update_or_create(
                 user=request.user,
                 topic=topic,
@@ -39,5 +48,5 @@ def add_comment(request, topic_id):
 
     return render(request, 'comments/add_comment.html', {
         'form': form,
-        'topic': topic
+        'topic': topic,
     })
