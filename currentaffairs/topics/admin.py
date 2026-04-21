@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.utils.html import format_html
+
 from .models import (
     Topic,
     TopicReadStatus,
@@ -9,9 +11,9 @@ from .models import (
 )
 
 
-# =========================
-# Topics
-# =========================
+# ==================================================
+# TOPICS
+# ==================================================
 
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
@@ -20,8 +22,11 @@ class TopicAdmin(admin.ModelAdmin):
         'title',
         'author',
         'is_open',
+        'participants_count',
+        'comments_count',
+        'has_file',
         'created_at',
-        'updated_at',
+        'open_link',
     )
 
     list_filter = (
@@ -34,9 +39,42 @@ class TopicAdmin(admin.ModelAdmin):
         'description',
         'content',
         'author__email',
+        'author__first_name',
+        'author__last_name',
     )
 
+    ordering = ('-created_at',)
+
     filter_horizontal = ('participants',)
+
+    readonly_fields = (
+        'created_at',
+        'updated_at',
+    )
+
+    def participants_count(self, obj):
+        return obj.participants.count()
+
+    participants_count.short_description = 'Users'
+
+    def comments_count(self, obj):
+        return obj.comments.count()
+
+    comments_count.short_description = 'Comments'
+
+    def has_file(self, obj):
+        return bool(obj.file)
+
+    has_file.boolean = True
+    has_file.short_description = 'File'
+
+    def open_link(self, obj):
+        return format_html(
+            '<a href="/topic/{}/" target="_blank">Open</a>',
+            obj.id
+        )
+
+    open_link.short_description = 'View'
 
 
 @admin.register(TopicReadStatus)
@@ -53,10 +91,12 @@ class TopicReadStatusAdmin(admin.ModelAdmin):
         'topic__title',
     )
 
+    ordering = ('-last_read_at',)
 
-# =========================
-# Polls
-# =========================
+
+# ==================================================
+# POLLS
+# ==================================================
 
 class PollOptionInline(admin.TabularInline):
     model = PollOption
@@ -72,7 +112,12 @@ class PollAdmin(admin.ModelAdmin):
         'is_open',
         'is_anonymous',
         'allow_multiple',
+        'participants_count',
+        'votes_count',
+        'completed',
+        'has_file',
         'created_at',
+        'open_link',
     )
 
     list_filter = (
@@ -85,15 +130,53 @@ class PollAdmin(admin.ModelAdmin):
     search_fields = (
         'question',
         'author__email',
+        'author__first_name',
+        'author__last_name',
     )
 
+    ordering = ('-created_at',)
+
     filter_horizontal = ('participants',)
+
     inlines = [PollOptionInline]
+
+    readonly_fields = ('created_at',)
 
     def short_question(self, obj):
         return obj.question[:60]
 
     short_question.short_description = 'Question'
+
+    def participants_count(self, obj):
+        return obj.participants.count()
+
+    participants_count.short_description = 'Users'
+
+    def votes_count(self, obj):
+        return obj.votes.count()
+
+    votes_count.short_description = 'Votes'
+
+    def completed(self, obj):
+        voters = obj.votes.values('user').distinct().count()
+        users = obj.participants.count()
+        return users > 0 and voters >= users
+
+    completed.boolean = True
+
+    def has_file(self, obj):
+        return bool(obj.file)
+
+    has_file.boolean = True
+    has_file.short_description = 'File'
+
+    def open_link(self, obj):
+        return format_html(
+            '<a href="/poll/{}/" target="_blank">Open</a>',
+            obj.id
+        )
+
+    open_link.short_description = 'View'
 
 
 @admin.register(PollVote)
@@ -106,14 +189,14 @@ class PollVoteAdmin(admin.ModelAdmin):
         'created_at',
     )
 
-    list_filter = (
-        'created_at',
-    )
+    list_filter = ('created_at',)
 
     search_fields = (
         'poll__question',
         'user__email',
     )
+
+    ordering = ('-created_at',)
 
 
 @admin.register(PollReadStatus)
@@ -129,3 +212,5 @@ class PollReadStatusAdmin(admin.ModelAdmin):
         'user__email',
         'poll__question',
     )
+
+    ordering = ('-last_read_at',)
