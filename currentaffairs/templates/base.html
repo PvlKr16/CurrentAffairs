@@ -1,7 +1,8 @@
 {% load static %}
 {% load i18n %}
+{% get_current_language as CURRENT_LANGUAGE %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}"
+<html lang="{{ CURRENT_LANGUAGE }}"
       data-theme="{% if request.user.is_authenticated %}{{ request.user.color_scheme|default:'emerald' }}{% else %}emerald{% endif %}">
 <head>
     <meta charset="UTF-8">

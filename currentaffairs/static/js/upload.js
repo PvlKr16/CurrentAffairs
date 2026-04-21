@@ -1,68 +1,47 @@
 document.addEventListener('DOMContentLoaded', function () {
+    let lang = document.documentElement.getAttribute('lang') || 'en';
+    lang = lang.slice(0, 2).toLowerCase();
 
-    const form = document.getElementById('upload-form');
-    const zone = document.getElementById('drop-zone');
-    const preview = document.getElementById('preview-box');
+    const i18n = {
+        be: { choose: 'Выберыце файл', empty: 'Файл не выбраны' },
+        en: { choose: 'Choose file', empty: 'No file selected' },
+        it: { choose: 'Scegli file', empty: 'Nessun file selezionato' },
+        lt: { choose: 'Pasirinkti failą', empty: 'Failas nepasirinktas' },
+        ru: { choose: 'Выберите файл', empty: 'Файл не выбран' },
+        ua: { choose: 'Оберіть файл', empty: 'Файл не вибрано' }
+    };
 
-    if (!form || !zone) return;
+    const t = i18n[lang] || i18n.en;
 
-    const input = form.querySelector('input[type="file"]');
-    if (!input) return;
+    document.querySelectorAll('input[type="file"]').forEach(input => {
+        if (input.dataset.ready) return;
+        input.dataset.ready = '1';
 
-    zone.addEventListener('click', () => input.click());
+        input.classList.add('d-none');
 
-    zone.addEventListener('dragover', function (e) {
-        e.preventDefault();
-        zone.classList.add('dragover');
+        const wrap = document.createElement('div');
+        wrap.className = 'd-flex align-items-center gap-2';
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn btn-outline-secondary btn-sm';
+        btn.textContent = t.choose;
+
+        const label = document.createElement('span');
+        label.className = 'small text-muted';
+        label.textContent = t.empty;
+
+        input.parentNode.insertBefore(wrap, input);
+        wrap.appendChild(btn);
+        wrap.appendChild(label);
+        wrap.appendChild(input);
+
+        btn.addEventListener('click', () => input.click());
+
+        input.addEventListener('change', function () {
+            label.textContent = input.files.length
+                ? input.files[0].name
+                : t.empty;
+        });
     });
-
-    zone.addEventListener('dragleave', function () {
-        zone.classList.remove('dragover');
-    });
-
-    zone.addEventListener('drop', function (e) {
-        e.preventDefault();
-        zone.classList.remove('dragover');
-
-        const file = e.dataTransfer.files[0];
-        if (!file) return;
-
-        input.files = e.dataTransfer.files;
-        renderPreview(file);
-    });
-
-    input.addEventListener('change', function () {
-        const file = input.files[0];
-        if (file) renderPreview(file);
-    });
-
-    function renderPreview(file) {
-
-        preview.innerHTML = '';
-
-        if (file.size > 5 * 1024 * 1024) {
-            preview.innerHTML =
-                '<div class="text-danger">Max 5 MB</div>';
-            input.value = '';
-            return;
-        }
-
-        const size =
-            (file.size / 1024).toFixed(1) + ' KB';
-
-        if (file.type.startsWith('image/')) {
-
-            const img = document.createElement('img');
-            img.className = 'img-thumbnail mt-2';
-            img.style.maxWidth = '180px';
-
-            img.src = URL.createObjectURL(file);
-
-            preview.appendChild(img);
-        }
-
-        preview.innerHTML +=
-            `<div class="small mt-2">${file.name} (${size})</div>`;
-    }
-
 });

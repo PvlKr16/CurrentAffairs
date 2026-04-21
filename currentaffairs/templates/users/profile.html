@@ -17,7 +17,7 @@
 <p>{{ profile_user.email }}</p>
 
 {% if profile_user.is_guest %}
-<p><strong>Guest user</strong></p>
+<p><strong>{% trans "Guest user" %}</strong></p>
 {% endif %}
 
 {% if is_owner %}
