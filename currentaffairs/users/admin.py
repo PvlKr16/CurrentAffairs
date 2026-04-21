@@ -11,6 +11,7 @@ class UserAdmin(BaseUserAdmin):
         'email',
         'first_name',
         'last_name',
+        'native_language',
         'is_guest',
         'color_scheme',
         'has_avatar',
@@ -19,6 +20,7 @@ class UserAdmin(BaseUserAdmin):
     )
 
     list_filter = (
+        'native_language',
         'is_guest',
         'color_scheme',
         'is_staff',
@@ -45,6 +47,7 @@ class UserAdmin(BaseUserAdmin):
                 'first_name',
                 'last_name',
                 'avatar',
+                'native_language',
                 'color_scheme',
             )
         }),
@@ -67,6 +70,7 @@ class UserAdmin(BaseUserAdmin):
                 'email',
                 'password1',
                 'password2',
+                'native_language',
                 'is_guest',
                 'color_scheme',
             ),

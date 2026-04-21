@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %}
 
-<h3>Search Results: "{{ query }}"</h3>
+<h3>{% trans "Search Results:" %} "{{ query }}"</h3>
 
 {% for topic in topics %}
 <div class="card mb-3 p-3">
@@ -15,7 +16,7 @@
     </small>
 </div>
 {% empty %}
-<p>No results found.</p>
+<p>{% trans "No results found." %}</p>
 {% endfor %}
 
 {% endblock %}

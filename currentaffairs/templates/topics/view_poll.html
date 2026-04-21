@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
 
 <div class="card p-4">
@@ -8,12 +9,12 @@
 
         <span id="poll-status"
               class="badge bg-success d-none">
-            Completed
+            {% trans "Completed" %}
         </span>
     </div>
 
     <p class="text-muted">
-        By {{ poll.author.first_name }}
+        {% trans "By" %} {{ poll.author.first_name }}
         | {{ poll.created_at|date:"Y-m-d H:i" }}
     </p>
 
@@ -52,7 +53,7 @@
         {% endfor %}
 
         <button class="btn btn-success mt-2">
-            Vote
+            {% trans "Vote" %}
         </button>
 
     </form>
@@ -60,7 +61,7 @@
 
     <hr>
 
-    <h5>Results</h5>
+    <h5>{% trans "Results" %}</h5>
 
     <div id="poll-results">
 
@@ -89,7 +90,7 @@
     <hr>
 
     <div id="waiting-box">
-        <h6>Waiting for answer:</h6>
+        <h6>{% trans "Waiting for answer:" %}</h6>
         <div id="waiting-list"></div>
     </div>
 
@@ -97,7 +98,7 @@
 
     <div class="card p-3 mt-4">
 
-        <h5>Participants</h5>
+        <h5>{% trans "Participants" %}</h5>
 
         {% for user in poll.participants.all %}
         <div class="d-flex justify-content-between align-items-center mb-2">
@@ -110,7 +111,7 @@
             {% if user == request.user and user != poll.author %}
             <a href="/poll/{{ poll.id }}/leave/"
                class="btn btn-sm btn-outline-danger">
-                Leave
+                {% trans "Leave" %}
             </a>
             {% endif %}
 
@@ -140,7 +141,7 @@
             </select>
 
             <button class="btn btn-success btn-sm w-100">
-                Add participant
+                {% trans "Add participant" %}
             </button>
 
         </form>

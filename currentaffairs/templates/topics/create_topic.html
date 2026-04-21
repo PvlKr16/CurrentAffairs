@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
+{% load i18n %}
+
 {% block content %}
 
-<h3>Create Topic</h3>
+<h3>{% trans "Create Topic" %}</h3>
 
 <form method="post"
       enctype="multipart/form-data"
@@ -10,44 +12,44 @@
     {% csrf_token %}
 
     <div class="mb-3">
-        <label>Title</label>
+        <label>{% trans "Title" %}</label>
         {{ form.title }}
     </div>
 
     <div class="mb-3">
-        <label>Description</label>
+        <label>{% trans "Description" %}</label>
         {{ form.description }}
     </div>
 
     <div class="mb-3">
-        <label>Content</label>
+        <label>{% trans "Content" %}</label>
         {{ form.content }}
     </div>
 
     <div class="mb-3">
-        <label>Attachment</label>
+        <label>{% trans "Attachment" %}</label>
 
         {{ form.file }}
 
         <div id="drop-zone" class="drop-zone mt-2">
-            Drag & Drop file here
+            {% trans "Drag & Drop file here" %}
         </div>
 
         <div id="preview-box" class="mt-2"></div>
     </div>
 
     <div class="mb-3">
-        <label>Visibility</label>
+        <label>{% trans "Visibility" %}</label>
         {{ form.is_open }}
     </div>
 
     <div class="mb-3">
-        <label>Participants</label>
+        <label>{% trans "Participants" %}</label>
         {{ form.participants }}
     </div>
 
-    <button class="btn btn-success">Save</button>
-    <a href="/home/" class="btn btn-secondary">Cancel</a>
+    <button class="btn btn-success">{% trans "Save" %}</button>
+    <a href="/home/" class="btn btn-secondary">{% trans "Cancel" %}</a>
 
 </form>
 

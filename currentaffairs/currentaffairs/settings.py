@@ -130,6 +130,7 @@ LANGUAGES = [
     ('it', _('Italiano')),
     ('lt', _('Lietuviu')),
     ('ru', _('Русский')),
+    ('ua', _('Українська')),
 ]
 
 LOCALE_PATHS = [

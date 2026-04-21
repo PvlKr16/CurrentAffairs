@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -20,7 +21,7 @@
         <input type="email" name="username" placeholder="Email" required>
 
         <div class="mb-3">
-            <label>Password</label>
+            <label>{% trans "Password" %}</label>
 
             <div class="input-group password-wrapper">
 
@@ -37,11 +38,11 @@
             </div>
 
             <small class="caps-warning text-danger d-none">
-                Caps Lock is ON
+                {% trans "Caps Lock is ON" %}
             </small>
         </div>
 
-        <button type="submit">Login</button>
+        <button type="submit">{% trans "Login" %}</button>
     </form>
 </div>
 

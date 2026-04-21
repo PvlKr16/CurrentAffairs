@@ -1,0 +1,328 @@
+# Italian translation for currentaffairs project.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-21 14:47+0300\n"
+"PO-Revision-Date: 2026-04-21 14:47+0300\n"
+"Last-Translator: \n"
+"Language-Team: Italian\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\currentaffairs\settings.py:128
+msgid "Беларуская"
+msgstr "Bielorusso"
+
+#: .\currentaffairs\settings.py:129
+msgid "English"
+msgstr "Inglese"
+
+#: .\currentaffairs\settings.py:130
+msgid "Italiano"
+msgstr "Italiano"
+
+#: .\currentaffairs\settings.py:131
+msgid "Lietuviu"
+msgstr "Lituano"
+
+#: .\currentaffairs\settings.py:132
+msgid "Русский"
+msgstr "Russo"
+
+#: .\currentaffairs\settings.py:133
+msgid "Українська"
+msgstr "Ucraino"
+
+#: .\templates\comments\add_comment.html:5
+#: .\templates\topics\topic_detail.html:32
+msgid "Add comment"
+msgstr "Aggiungi commento"
+
+#: .\templates\comments\add_comment.html:20
+#: .\templates\topics\create_topic.html:30
+msgid "Attachment"
+msgstr "Allegato"
+
+#: .\templates\comments\add_comment.html:24
+#: .\templates\topics\create_topic.html:35
+msgid "Drag & Drop file here"
+msgstr "Trascina il file qui"
+
+#: .\templates\comments\add_comment.html:31
+msgid "Save comment"
+msgstr "Salva commento"
+
+#: .\templates\comments\add_comment.html:36
+#: .\templates\topics\create_topic.html:52
+msgid "Cancel"
+msgstr "Annulla"
+
+#: .\templates\components\header.html:25
+msgid "Search..."
+msgstr "Cerca..."
+
+#: .\templates\components\header.html:32
+msgid "by author"
+msgstr "per autore"
+
+#: .\templates\components\header.html:33
+msgid "in title"
+msgstr "nel titolo"
+
+#: .\templates\components\header.html:34
+msgid "in description"
+msgstr "nella descrizione"
+
+#: .\templates\components\header.html:35
+msgid "in content"
+msgstr "nel contenuto"
+
+#: .\templates\components\header.html:36
+msgid "in comments"
+msgstr "nei commenti"
+
+#: .\templates\components\header.html:40
+msgid "by date"
+msgstr "per data"
+
+#: .\templates\components\header.html:54
+msgid "Search"
+msgstr "Cerca"
+
+#: .\templates\components\header.html:67 .\templates\users\contacts.html:6
+msgid "Contacts"
+msgstr "Contatti"
+
+#: .\templates\components\header.html:76
+msgid "New"
+msgstr "Aggiungi"
+
+#: .\templates\components\header.html:83
+msgid "Topic"
+msgstr "Caso"
+
+#: .\templates\components\header.html:90
+msgid "Poll"
+msgstr "Sondaggio"
+
+#: .\templates\components\header.html:123
+msgid "Logout"
+msgstr "Esci"
+
+#: .\templates\components\header.html:141
+msgid "Colors"
+msgstr "Colori"
+
+#: .\templates\components\header.html:177
+#: .\templates\components\language_menu.html:8
+msgid "Language"
+msgstr "Lingua"
+
+#: .\templates\core\home.html:5
+msgid "Topics"
+msgstr "Argomenti"
+
+#: .\templates\core\home.html:28
+msgid "No content"
+msgstr "Nessun contenuto"
+
+#: .\templates\topics\create_poll.html:5
+msgid "New Poll"
+msgstr "Nuovo sondaggio"
+
+#: .\templates\topics\create_poll.html:14
+msgid "Options"
+msgstr "Opzioni"
+
+#: .\templates\topics\create_poll.html:23
+msgid "+ More option"
+msgstr "+ Altra opzione"
+
+#: .\templates\topics\create_poll.html:29
+msgid "Save Poll"
+msgstr "Salva sondaggio"
+
+#: .\templates\topics\create_topic.html:6
+msgid "Create Topic"
+msgstr "Crea argomento"
+
+#: .\templates\topics\create_topic.html:15 .\topics\forms.py:30
+msgid "Title"
+msgstr "Titolo"
+
+#: .\templates\topics\create_topic.html:20 .\topics\forms.py:31
+msgid "Description"
+msgstr "Descrizione"
+
+#: .\templates\topics\create_topic.html:25 .\topics\forms.py:32
+msgid "Content"
+msgstr "Contenuto"
+
+#: .\templates\topics\create_topic.html:42
+msgid "Visibility"
+msgstr "Visibilità"
+
+#: .\templates\topics\create_topic.html:47
+#: .\templates\topics\topic_detail.html:77
+#: .\templates\topics\view_poll.html:101 .\topics\forms.py:35
+#: .\topics\forms.py:65
+msgid "Participants"
+msgstr "Partecipanti"
+
+#: .\templates\topics\create_topic.html:51
+msgid "Save"
+msgstr "Salva"
+
+#: .\templates\topics\search_results.html:6
+msgid "Search Results:"
+msgstr "Risultati della ricerca:"
+
+#: .\templates\topics\search_results.html:19
+msgid "No results found."
+msgstr "Nessun risultato trovato."
+
+#: .\templates\topics\topic_detail.html:7
+msgid "Quote"
+msgstr "Citazione"
+
+#: .\templates\topics\topic_detail.html:36
+msgid "Mark as unread"
+msgstr "Segna come non letto"
+
+#: .\templates\topics\topic_detail.html:41
+msgid "Comments"
+msgstr "Commenti"
+
+#: .\templates\topics\topic_detail.html:63
+msgid "No comments yet"
+msgstr "Nessun commento ancora"
+
+#: .\templates\topics\topic_detail.html:90
+#: .\templates\topics\view_poll.html:114
+msgid "Leave"
+msgstr "Abbandona"
+
+#: .\templates\topics\topic_detail.html:119
+#: .\templates\topics\view_poll.html:144
+msgid "Add participant"
+msgstr "Aggiungi partecipante"
+
+#: .\templates\topics\unread_topics.html:6
+msgid "Unread"
+msgstr "Non letti"
+
+#: .\templates\topics\unread_topics.html:11
+msgid "oldest"
+msgstr "più vecchi"
+
+#: .\templates\topics\unread_topics.html:16
+msgid "newest"
+msgstr "più recenti"
+
+#: .\templates\topics\unread_topics.html:42
+msgid "No unread items"
+msgstr "Nessun elemento non letto"
+
+#: .\templates\topics\view_poll.html:12
+msgid "Completed"
+msgstr "Completato"
+
+#: .\templates\topics\view_poll.html:17
+msgid "By"
+msgstr "Di"
+
+#: .\templates\topics\view_poll.html:56
+msgid "Vote"
+msgstr "Vota"
+
+#: .\templates\topics\view_poll.html:64
+msgid "Results"
+msgstr "Risultati"
+
+#: .\templates\topics\view_poll.html:93
+msgid "Waiting for answer:"
+msgstr "In attesa di risposta:"
+
+#: .\templates\users\login.html:24 .\users\forms.py:17
+msgid "Password"
+msgstr "Password"
+
+#: .\templates\users\login.html:41 .\templates\users\profile.html:49
+#: .\templates\users\profile.html:60 .\templates\users\profile.html:75
+msgid "Caps Lock is ON"
+msgstr "Il Blocco Maiuscole è attivo"
+
+#: .\templates\users\login.html:45
+msgid "Login"
+msgstr "Accedi"
+
+#: .\templates\users\profile.html:26
+msgid "Change Avatar"
+msgstr "Cambia avatar"
+
+#: .\templates\users\profile.html:32
+msgid "Save Avatar"
+msgstr "Salva avatar"
+
+#: .\templates\users\profile.html:37 .\templates\users\profile.html:79
+msgid "Change Password"
+msgstr "Cambia password"
+
+#: .\templates\users\profile.html:43
+msgid "Old password"
+msgstr "Vecchia password"
+
+#: .\templates\users\profile.html:53
+msgid "New password"
+msgstr "Nuova password"
+
+#: .\templates\users\profile.html:69
+msgid "Repeat new password"
+msgstr "Ripeti la nuova password"
+
+#: .\topics\forms.py:33 .\topics\forms.py:61
+msgid "File"
+msgstr "File"
+
+#: .\topics\forms.py:34 .\topics\forms.py:62
+msgid "Open"
+msgstr "Aperto"
+
+#: .\topics\forms.py:60
+msgid "Question"
+msgstr "Domanda"
+
+#: .\topics\forms.py:63
+msgid "Anonymous"
+msgstr "Anonimo"
+
+#: .\topics\forms.py:64
+msgid "Allow multiple"
+msgstr "Selezione multipla"
+
+#: .\users\forms.py:14
+msgid "First name"
+msgstr "Nome"
+
+#: .\users\forms.py:15
+msgid "Last name"
+msgstr "Cognome"
+
+#: .\users\forms.py:16
+msgid "Email"
+msgstr "Email"
+
+#: .\users\forms.py:18
+msgid "Guest"
+msgstr "Ospite"
+
+#: .\users\forms.py:19
+msgid "Native language"
+msgstr "Lingua madre"

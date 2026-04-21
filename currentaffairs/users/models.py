@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class User(AbstractUser):
@@ -7,6 +8,21 @@ class User(AbstractUser):
 
     is_guest = models.BooleanField(default=False)
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+
+    LANGUAGE_CHOICES = [
+        ('be', 'Беларуская'),
+        ('en', 'English'),
+        ('it', 'Italiano'),
+        ('lt', 'Lietuvių'),
+        ('ru', 'Русский'),
+        ('ua', 'Українська'),
+    ]
+
+    native_language = models.CharField(
+        max_length=5,
+        choices=LANGUAGE_CHOICES,
+        default='en'
+    )
 
     COLOR_CHOICES = [
         ('emerald', 'Emerald'),

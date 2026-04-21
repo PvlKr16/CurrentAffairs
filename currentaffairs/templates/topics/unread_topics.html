@@ -1,18 +1,19 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3>Unread</h3>
+    <h3>{% trans "Unread" %}</h3>
 
     <div>
         <a href="?sort=oldest"
            class="btn btn-sm btn-outline-secondary">
-            oldest
+            {% trans "oldest" %}
         </a>
 
         <a href="?sort=newest"
            class="btn btn-sm btn-outline-secondary">
-            newest
+            {% trans "newest" %}
         </a>
     </div>
 </div>
@@ -38,7 +39,7 @@
 </div>
 
 {% empty %}
-<p>No unread items</p>
+<p>{% trans "No unread items" %}</p>
 {% endfor %}
 
 {% endblock %}

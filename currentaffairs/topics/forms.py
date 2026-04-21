@@ -2,6 +2,7 @@ from django import forms
 from .models import Topic, Poll
 from users.models import User
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
@@ -25,6 +26,14 @@ class TopicCreateForm(forms.ModelForm):
             'is_open',
             'participants'
         ]
+        labels = {
+            'title': _('Title'),
+            'description': _('Description'),
+            'content': _('Content'),
+            'file': _('File'),
+            'is_open': _('Open'),
+            'participants': _('Participants')
+        }
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -47,6 +56,14 @@ class PollForm(forms.ModelForm):
             'allow_multiple',
             'participants'
         ]
+        labels = {
+            'question': _('Question'),
+            'file': _('File'),
+            'is_open': _('Open'),
+            'is_anonymous': _('Anonymous'),
+            'allow_multiple': _('Allow multiple'),
+            'participants': _('Participants')
+        }
 
         widgets = {
             'participants': forms.SelectMultiple(

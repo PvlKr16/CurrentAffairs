@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %}
 
@@ -22,41 +23,41 @@
 {% if is_owner %}
 
 <hr>
-<h5>Change Avatar</h5>
+<h5>{% trans "Change Avatar" %}</h5>
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ avatar_form.as_p }}
     <button class="btn btn-success" name="save_avatar">
-        Save Avatar
+        {% trans "Save Avatar" %}
     </button>
 </form>
 
 <hr>
-<h5>Change Password</h5>
+<h5>{% trans "Change Password" %}</h5>
 
 <form method="post">
     {% csrf_token %}
 
     <div class="mb-3">
-        <label>Old password</label>
+        <label>{% trans "Old password" %}</label>
 
         <div class="input-group password-wrapper">
             {{ password_form.old_password }}
             <button type="button" class="btn btn-outline-secondary password-peek">👁</button>
         </div>
-        <small class="caps-warning text-danger d-none">Caps Lock is ON</small>
+        <small class="caps-warning text-danger d-none">{% trans "Caps Lock is ON" %}</small>
     </div>
 
     <div class="mb-3">
-        <label>New password</label>
+        <label>{% trans "New password" %}</label>
 
         <div class="input-group password-wrapper">
             {{ password_form.new_password1 }}
             <button type="button" class="btn btn-outline-secondary password-peek">👁</button>
         </div>
 
-        <small class="caps-warning text-danger d-none">Caps Lock is ON</small>
+        <small class="caps-warning text-danger d-none">{% trans "Caps Lock is ON" %}</small>
 
         <div class="password-strength mt-2">
             <div class="strength-bar"></div>
@@ -65,17 +66,17 @@
     </div>
 
     <div class="mb-3">
-        <label>Repeat new password</label>
+        <label>{% trans "Repeat new password" %}</label>
 
         <div class="input-group password-wrapper">
             {{ password_form.new_password2 }}
             <button type="button" class="btn btn-outline-secondary password-peek">👁</button>
         </div>
-        <small class="caps-warning text-danger d-none">Caps Lock is ON</small>
+        <small class="caps-warning text-danger d-none">{% trans "Caps Lock is ON" %}</small>
     </div>
 
     <button class="btn btn-warning" name="change_password">
-        Change Password
+        {% trans "Change Password" %}
     </button>
 </form>
 

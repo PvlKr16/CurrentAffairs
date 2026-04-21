@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %}
 
-<h3>Contacts</h3>
+<h3>{% trans "Contacts" %}</h3>
 
 <div class="row">
 {% for user in users %}

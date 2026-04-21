@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% block content %}
 
-<h3>Add comment</h3>
+<h3>{% trans "Add comment" %}</h3>
 
 <form method="post"
       enctype="multipart/form-data"
@@ -16,23 +17,23 @@
     {{ form.content }}
 
     <div class="mb-3 mt-3">
-        <label>Attachment</label>
+        <label>{% trans "Attachment" %}</label>
         {{ form.file }}
 
         <div id="drop-zone" class="drop-zone mt-2">
-            Drag & Drop file here
+            {% trans "Drag & Drop file here" %}
         </div>
 
         <div id="preview-box" class="mt-2"></div>
     </div>
 
     <button class="btn btn-success">
-        Save comment
+        {% trans "Save comment" %}
     </button>
 
     <a href="/topic/{{ topic.id }}/"
        class="btn btn-secondary">
-        Cancel
+        {% trans "Cancel" %}
     </a>
 </form>
 

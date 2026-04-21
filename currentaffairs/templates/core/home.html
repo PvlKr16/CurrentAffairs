@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block content %}
 
-<h3>Topics</h3>
+<h3>{% trans "Topics" %}</h3>
 
 {% for item in items %}
 
@@ -25,7 +25,7 @@
 </div>
 
 {% empty %}
-<p>No content</p>
+<p>{% trans "No content" %}</p>
 {% endfor %}
 
 {% endblock %}

@@ -1,0 +1,59 @@
+{% load i18n %}
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle"
+       href="#"
+       role="button"
+       data-bs-toggle="dropdown">
+        {% trans "Language" %}
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-end">
+
+        <li>
+            <form action="{% url 'set_language' %}" method="post" class="px-2">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="be">
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button class="dropdown-item">Беларуская</button>
+            </form>
+        </li>
+
+        <li>
+            <form action="{% url 'set_language' %}" method="post" class="px-2">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="en">
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button class="dropdown-item">English</button>
+            </form>
+        </li>
+
+        <li>
+            <form action="{% url 'set_language' %}" method="post" class="px-2">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="it">
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button class="dropdown-item">Italiano</button>
+            </form>
+        </li>
+
+        <li>
+            <form action="{% url 'set_language' %}" method="post" class="px-2">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="lt">
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button class="dropdown-item">Lietuviu</button>
+            </form>
+        </li>
+
+        <li>
+            <form action="{% url 'set_language' %}" method="post" class="px-2">
+                {% csrf_token %}
+                <input type="hidden" name="language" value="ru">
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button class="dropdown-item">Русский</button>
+            </form>
+        </li>
+
+    </ul>
+</li>
