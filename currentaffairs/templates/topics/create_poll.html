@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n %}
+
 {% block content %}
 
-<h3>{% trans "New Poll" %}</h3>
+<div class="page-card p-4">
+
+<h3 class="mb-4">{% trans "New Poll" %}</h3>
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -11,23 +14,27 @@
 
     <hr>
 
-    <label>{% trans "Options" %}</label>
+    <label class="form-label">{% trans "Options" %}</label>
 
     <div id="options-container">
-        <input type="text" name="options" class="form-control mb-2">
+        <input type="text"
+               name="options"
+               class="form-control mb-2">
     </div>
 
     <button type="button"
             id="add-option"
-            class="btn btn-secondary mb-3">
+            class="btn btn-outline-secondary mb-3">
         {% trans "+ More option" %}
     </button>
 
-    <br>
-
-    <button class="btn btn-success">
-        {% trans "Save Poll" %}
-    </button>
+    <div>
+        <button class="btn btn-success">
+            {% trans "Save Poll" %}
+        </button>
+    </div>
 </form>
+
+</div>
 
 {% endblock %}

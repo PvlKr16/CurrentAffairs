@@ -3,32 +3,30 @@
 
 {% block content %}
 
-<h3>{% trans "Create Topic" %}</h3>
+<div class="page-card p-4">
 
-<form method="post"
-      enctype="multipart/form-data"
-      id="upload-form">
+<h3 class="mb-4">{% trans "Create Topic" %}</h3>
 
+<form method="post" enctype="multipart/form-data" id="upload-form">
     {% csrf_token %}
 
     <div class="mb-3">
-        <label>{% trans "Title" %}</label>
+        <label class="form-label">{% trans "Title" %}</label>
         {{ form.title }}
     </div>
 
     <div class="mb-3">
-        <label>{% trans "Description" %}</label>
+        <label class="form-label">{% trans "Description" %}</label>
         {{ form.description }}
     </div>
 
     <div class="mb-3">
-        <label>{% trans "Content" %}</label>
+        <label class="form-label">{% trans "Content" %}</label>
         {{ form.content }}
     </div>
 
     <div class="mb-3">
-        <label>{% trans "Attachment" %}</label>
-
+        <label class="form-label">{% trans "Attachment" %}</label>
         {{ form.file }}
 
         <div id="drop-zone" class="drop-zone mt-2">
@@ -39,18 +37,27 @@
     </div>
 
     <div class="mb-3">
-        <label>{% trans "Visibility" %}</label>
+        <label class="form-label">{% trans "Visibility" %}</label>
         {{ form.is_open }}
     </div>
 
-    <div class="mb-3">
-        <label>{% trans "Participants" %}</label>
+    <div class="mb-4">
+        <label class="form-label">{% trans "Participants" %}</label>
         {{ form.participants }}
     </div>
 
-    <button class="btn btn-success">{% trans "Save" %}</button>
-    <a href="/home/" class="btn btn-secondary">{% trans "Cancel" %}</a>
+    <div class="d-flex gap-2">
+        <button class="btn btn-success">
+            {% trans "Save" %}
+        </button>
+
+        <a href="/home/" class="btn btn-outline-secondary">
+            {% trans "Cancel" %}
+        </a>
+    </div>
 
 </form>
+
+</div>
 
 {% endblock %}

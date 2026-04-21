@@ -3,83 +3,107 @@
 
 {% block content %}
 
-<h3>
-    {{ profile_user.first_name }} {{ profile_user.last_name }}
-</h3>
+<div class="page-card p-4">
 
-{% if profile_user.avatar %}
-    <img src="{{ profile_user.avatar.url }}"
-         class="rounded-circle mb-3"
-         width="120"
-         height="120">
-{% endif %}
+    <div class="d-flex flex-column flex-md-row align-items-md-center gap-4">
 
-<p>{{ profile_user.email }}</p>
-
-{% if profile_user.is_guest %}
-<p><strong>{% trans "Guest user" %}</strong></p>
-{% endif %}
-
-{% if is_owner %}
-
-<hr>
-<h5>{% trans "Change Avatar" %}</h5>
-
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ avatar_form.as_p }}
-    <button class="btn btn-success" name="save_avatar">
-        {% trans "Save Avatar" %}
-    </button>
-</form>
-
-<hr>
-<h5>{% trans "Change Password" %}</h5>
-
-<form method="post">
-    {% csrf_token %}
-
-    <div class="mb-3">
-        <label>{% trans "Old password" %}</label>
-
-        <div class="input-group password-wrapper">
-            {{ password_form.old_password }}
-            <button type="button" class="btn btn-outline-secondary password-peek">👁</button>
+        <div>
+            {% if profile_user.avatar %}
+                <img src="{{ profile_user.avatar.url }}"
+                     class="rounded-circle profile-avatar">
+            {% else %}
+                <div class="profile-avatar profile-placeholder">
+                    {{ profile_user.first_name|first }}{{ profile_user.last_name|first }}
+                </div>
+            {% endif %}
         </div>
-        <small class="caps-warning text-danger d-none">{% trans "Caps Lock is ON" %}</small>
+
+        <div class="flex-grow-1">
+            <h3 class="mb-1">
+                {{ profile_user.first_name }} {{ profile_user.last_name }}
+            </h3>
+
+            <p class="text-muted mb-1">{{ profile_user.email }}</p>
+
+            {% if profile_user.is_guest %}
+                <span class="badge bg-secondary">
+                    {% trans "Guest user" %}
+                </span>
+            {% endif %}
+        </div>
+
     </div>
 
-    <div class="mb-3">
-        <label>{% trans "New password" %}</label>
+    {% if is_owner %}
 
-        <div class="input-group password-wrapper">
-            {{ password_form.new_password1 }}
-            <button type="button" class="btn btn-outline-secondary password-peek">👁</button>
+    <hr class="my-4">
+
+    <div class="row g-4">
+
+        <div class="col-lg-6">
+            <h5>{% trans "Change Avatar" %}</h5>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ avatar_form.as_p }}
+
+                <button class="btn btn-success"
+                        name="save_avatar">
+                    {% trans "Save Avatar" %}
+                </button>
+            </form>
         </div>
 
-        <small class="caps-warning text-danger d-none">{% trans "Caps Lock is ON" %}</small>
+        <div class="col-lg-6">
+            <h5>{% trans "Change Password" %}</h5>
 
-        <div class="password-strength mt-2">
-            <div class="strength-bar"></div>
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">{% trans "Old password" %}</label>
+                    <div class="input-group password-wrapper">
+                        {{ password_form.old_password }}
+                        <button type="button" class="btn btn-outline-secondary password-peek">👁</button>
+                    </div>
+                    <small class="caps-warning text-danger d-none">{% trans "Caps Lock is ON" %}</small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{% trans "New password" %}</label>
+                    <div class="input-group password-wrapper">
+                        {{ password_form.new_password1 }}
+                        <button type="button" class="btn btn-outline-secondary password-peek">👁</button>
+                    </div>
+
+                    <small class="caps-warning text-danger d-none">{% trans "Caps Lock is ON" %}</small>
+
+                    <div class="password-strength mt-2">
+                        <div class="strength-bar"></div>
+                    </div>
+                    <small class="strength-text text-muted"></small>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{% trans "Repeat new password" %}</label>
+                    <div class="input-group password-wrapper">
+                        {{ password_form.new_password2 }}
+                        <button type="button" class="btn btn-outline-secondary password-peek">👁</button>
+                    </div>
+                    <small class="caps-warning text-danger d-none">{% trans "Caps Lock is ON" %}</small>
+                </div>
+
+                <button class="btn btn-warning"
+                        name="change_password">
+                    {% trans "Change Password" %}
+                </button>
+            </form>
         </div>
-        <small class="strength-text text-muted"></small>
+
     </div>
 
-    <div class="mb-3">
-        <label>{% trans "Repeat new password" %}</label>
+    {% endif %}
 
-        <div class="input-group password-wrapper">
-            {{ password_form.new_password2 }}
-            <button type="button" class="btn btn-outline-secondary password-peek">👁</button>
-        </div>
-        <small class="caps-warning text-danger d-none">{% trans "Caps Lock is ON" %}</small>
-    </div>
-
-    <button class="btn btn-warning" name="change_password">
-        {% trans "Change Password" %}
-    </button>
-</form>
-
-{% endif %}
+</div>
 
 {% endblock %}
