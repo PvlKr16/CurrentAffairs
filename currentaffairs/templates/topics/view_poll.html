@@ -18,15 +18,11 @@
         | {{ poll.created_at|date:"Y-m-d H:i" }}
     </p>
 
-    <!-- SINGLE FILE -->
-    {% include 'includes/file_preview.html' with file=poll.file %}
 
     <!-- MULTIPLE FILES -->
-    {% if poll.attachments.all %}
+    {% if poll.attachments.exists %}
     <div class="mt-3 d-flex flex-wrap gap-3">
-        {% for item in poll.attachments.all %}
-            {% include 'includes/file_preview.html' with file=item.file %}
-        {% endfor %}
+        {% include 'includes/file_preview.html' with files=poll.attachments.all %}
     </div>
     {% endif %}
 

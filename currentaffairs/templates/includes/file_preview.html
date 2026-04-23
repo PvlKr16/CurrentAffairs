@@ -1,52 +1,66 @@
 {% load file_extras %}
 
-{% if file %}
-{% with file|ext as extension %}
+{% if files %}
 
-<div class="file-card mt-3">
+<div class="attachments mt-2">
 
-    {% if extension in '.jpg,.jpeg,.png,.gif,.webp,.svg' %}
-        <a href="{{ file.url }}" target="_blank">
-            <img src="{{ file.url }}" class="file-thumb">
-        </a>
+    <!-- 🖼 IMAGE GALLERY -->
+    <div class="image-gallery">
+        {% for f in files %}
+            {% with f.file|ext as extension %}
+                {% if extension in '.jpg,.jpeg,.png,.gif,.webp,.svg' %}
+                    <a href="{{ f.file.url }}" target="_blank">
+                        <img src="{{ f.file.url }}" class="gallery-img">
+                    </a>
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+    </div>
 
-    {% elif extension in '.mp4,.webm,.ogg,.mov' %}
-        <video class="file-video" controls preload="metadata">
-            <source src="{{ file.url }}">
-        </video>
+    <!-- 🎬 VIDEO -->
+    {% for f in files %}
+        {% with f.file|ext as extension %}
+            {% if extension in '.mp4,.webm,.ogg' %}
+                <video controls class="file-video mt-2">
+                    <source src="{{ f.file.url }}">
+                </video>
+            {% endif %}
+        {% endwith %}
+    {% endfor %}
 
-    {% elif extension == '.pdf' %}
-        <a href="{{ file.url }}" target="_blank" class="file-icon">
-            📄 PDF
-        </a>
+    <!-- 📄 OTHER FILES -->
+    <div class="file-list mt-2">
+        {% for f in files %}
+            {% with f.file|ext as extension %}
 
-    {% elif extension == '.doc' or extension == '.docx' %}
-        <a href="{{ file.url }}" target="_blank" class="file-icon">
-            📝 DOC
-        </a>
+                {% if extension not in '.jpg,.jpeg,.png,.gif,.webp,.svg,.mp4,.webm,.ogg' %}
+                    <div class="file-card">
 
-    {% elif extension == '.xls' or extension == '.xlsx' %}
-        <a href="{{ file.url }}" target="_blank" class="file-icon">
-            📊 XLS
-        </a>
+                        <a href="{{ f.file.url }}"
+                           target="_blank"
+                           class="file-icon">
 
-    {% elif extension == '.zip' or extension == '.rar' %}
-        <a href="{{ file.url }}" target="_blank" class="file-icon">
-            🗜 ZIP
-        </a>
+                            {% if extension == '.pdf' %} 📄 PDF
+                            {% elif extension in '.doc,.docx' %} 📝 DOC
+                            {% elif extension in '.xls,.xlsx' %} 📊 XLS
+                            {% elif extension in '.zip,.rar' %} 🗜 ZIP
+                            {% else %} 📎 FILE
+                            {% endif %}
 
-    {% else %}
-        <a href="{{ file.url }}" target="_blank" class="file-icon">
-            📎 FILE
-        </a>
-    {% endif %}
+                        </a>
 
-    <div class="small mt-2">
-        <strong>{{ file|filename }}</strong><br>
-        {{ file.size|filesizeformat }}
+                        <div class="small mt-1">
+                            {{ f.file|filename }}
+                            ({{ f.file.size|filesizeformat }})
+                        </div>
+
+                    </div>
+                {% endif %}
+
+            {% endwith %}
+        {% endfor %}
     </div>
 
 </div>
 
-{% endwith %}
 {% endif %}

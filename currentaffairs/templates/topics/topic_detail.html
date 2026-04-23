@@ -24,15 +24,10 @@
     {{ topic.content|linebreaks }}
 </div>
 
-<!-- OLD SINGLE FILE -->
-{% include 'includes/file_preview.html' with file=topic.file %}
-
 <!-- MULTIPLE FILES -->
-{% if topic.attachments.all %}
+{% if topic.attachments.exists %}
 <div class="mt-3 d-flex flex-wrap gap-3">
-    {% for item in topic.attachments.all %}
-        {% include 'includes/file_preview.html' with file=item.file %}
-    {% endfor %}
+    {% include 'includes/file_preview.html' with files=topic.attachments.all %}
 </div>
 {% endif %}
 
@@ -66,15 +61,10 @@
         {{ comment.content|linebreaks }}
     </div>
 
-    <!-- OLD FILE -->
-    {% include 'includes/file_preview.html' with file=comment.file %}
-
     <!-- MULTIPLE FILES -->
-    {% if comment.attachments.all %}
+    {% if comment.attachments.exists %}
     <div class="mt-2 d-flex flex-wrap gap-3">
-        {% for item in comment.attachments.all %}
-            {% include 'includes/file_preview.html' with file=item.file %}
-        {% endfor %}
+        {% include 'includes/file_preview.html' with files=comment.attachments.all %}
     </div>
     {% endif %}
 
