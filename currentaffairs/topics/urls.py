@@ -1,4 +1,5 @@
 from django.urls import path
+from core.views import home_json
 from .views import (
     create_topic,
     topic_detail,
@@ -40,4 +41,6 @@ urlpatterns = [
 
     path('topic/<int:topic_id>/follow/', follow_topic),
     path('topic/<int:topic_id>/unfollow/', unfollow_topic),
+
+    path('api/home/', home_json),
 ]

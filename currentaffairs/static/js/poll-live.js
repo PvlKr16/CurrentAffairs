@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!window.POLL_ID) return;
 
     loadResults();
-    setInterval(loadResults, 15000);
+    setInterval(loadResults, 5000);
 
 });
 

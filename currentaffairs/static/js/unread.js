@@ -17,5 +17,5 @@ function updateUnreadCounter() {
 
 document.addEventListener('DOMContentLoaded', function () {
     updateUnreadCounter();
-    setInterval(updateUnreadCounter, 60000);
+    setInterval(updateUnreadCounter, 10000);
 });

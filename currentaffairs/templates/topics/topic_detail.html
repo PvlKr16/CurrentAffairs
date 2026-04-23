@@ -54,22 +54,6 @@
     {% trans "Mark as unread" %}
 </a>
 
-<!--<hr>-->
-
-<!--<h6>{% trans "Participants" %} ({{ topic.participants.count }})</h6>-->
-
-<!--<div class="mb-3">-->
-<!--    {% for user in topic.participants.all %}-->
-<!--        <span class="badge bg-secondary me-1">-->
-<!--            {{ user.first_name|default:user.email }}-->
-<!--        </span>-->
-<!--    {% empty %}-->
-<!--        <span class="text-muted">-->
-<!--            {% trans "No participants yet" %}-->
-<!--        </span>-->
-<!--    {% endfor %}-->
-<!--</div>-->
-
 <hr>
 
 <h5>{% trans "Participants" %}</h5>
@@ -123,29 +107,31 @@
 
 <h5>{% trans "Comments" %}</h5>
 
-{% for comment in comments %}
-<div class="card mb-3 p-3">
+<div id="comments-container">
+    {% for comment in comments %}
+    <div class="card mb-3 p-3">
 
-    <div class="d-flex justify-content-between">
-        <strong>{{ comment.author }}</strong>
-        <small>{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+        <div class="d-flex justify-content-between">
+            <strong>{{ comment.author }}</strong>
+            <small>{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+        </div>
+
+        {% if comment.title %}
+            <h6 class="mt-2">{{ comment.title }}</h6>
+        {% endif %}
+
+        <div class="selectable-text">
+            {{ comment.content|linebreaks }}
+        </div>
+
+        {% if comment.attachments.exists %}
+            {% include 'includes/file_preview.html' with files=comment.attachments.all %}
+        {% endif %}
+
     </div>
-
-    {% if comment.title %}
-        <h6 class="mt-2">{{ comment.title }}</h6>
-    {% endif %}
-
-    <div class="selectable-text">
-        {{ comment.content|linebreaks }}
-    </div>
-
-    {% if comment.attachments.exists %}
-        {% include 'includes/file_preview.html' with files=comment.attachments.all %}
-    {% endif %}
-
+    {% empty %}
+    <p>{% trans "No comments yet" %}</p>
+    {% endfor %}
 </div>
-{% empty %}
-<p>{% trans "No comments yet" %}</p>
-{% endfor %}
 
 {% endblock %}

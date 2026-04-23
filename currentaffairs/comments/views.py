@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.http import JsonResponse
 
 from .forms import CommentForm
 from .models import Comment, CommentAttachment
@@ -41,3 +42,21 @@ def add_comment(request, topic_id):
         'form': form,
         'topic': topic
     })
+
+@login_required
+def comments_json(request, topic_id):
+    topic = get_object_or_404(Topic, id=topic_id)
+
+    comments = topic.comments.select_related('author').order_by('created_at')
+
+    data = []
+
+    for c in comments:
+        data.append({
+            'id': c.id,
+            'author': f"{c.author.first_name} {c.author.last_name}",
+            'content': c.content,
+            'created_at': c.created_at.strftime("%Y-%m-%d %H:%M"),
+        })
+
+    return JsonResponse({'comments': data})
