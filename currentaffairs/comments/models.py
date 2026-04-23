@@ -23,3 +23,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"{self.author} - {self.topic}"
+
+
+class CommentAttachment(models.Model):
+    comment = models.ForeignKey(
+        Comment,
+        on_delete=models.CASCADE,
+        related_name='attachments'
+    )
+    file = models.FileField(upload_to='comments/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.file.name

@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Comment
+from .models import Comment, CommentAttachment
+
+
+class CommentAttachmentInline(admin.TabularInline):
+    model = CommentAttachment
+    extra = 0
 
 
 @admin.register(Comment)
@@ -13,22 +18,18 @@ class CommentAdmin(admin.ModelAdmin):
         'created_at',
     )
 
-    list_filter = (
-        'created_at',
-        'topic',
-    )
+    inlines = [CommentAttachmentInline]
 
-    search_fields = (
-        'title',
-        'content',
-        'author__email',
-        'topic__title',
-    )
+    actions = ['clear_files']
 
-    ordering = ('-created_at',)
+    def clear_files(self, request, queryset):
+        for obj in queryset:
+            if obj.file:
+                obj.file.delete(save=False)
+                obj.file = None
+                obj.save()
 
     def has_file(self, obj):
         return bool(obj.file)
 
     has_file.boolean = True
-    has_file.short_description = 'File'

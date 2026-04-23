@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
 from .forms import CommentForm
-from .models import Comment
+from .models import Comment, CommentAttachment
 from topics.models import Topic, TopicReadStatus
 
 
@@ -11,42 +11,33 @@ from topics.models import Topic, TopicReadStatus
 def add_comment(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
 
-    # Only participants see closed topic
-    if not topic.is_open and request.user not in topic.participants.all():
-        return redirect('/home/')
-
-    initial = {}
-
-    quote = request.GET.get('quote', '').strip()
-    if quote:
-        initial['content'] = f'> {quote}\n\n'
-
-    form = CommentForm(
-        request.POST or None,
-        request.FILES or None,
-        initial=initial
-    )
+    form = CommentForm(request.POST or None, request.FILES or None)
 
     if request.method == 'POST':
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.topic = topic
             comment.author = request.user
+            comment.topic = topic
+
+            # ❗ отключаем старое поле
+            comment.file = None
+
             comment.save()
 
-            # User is added to participants after he added comment
-            topic.participants.add(request.user)
+            # ✅ MULTIPLE FILES
+            files = request.FILES.getlist('file')
+            for f in files:
+                CommentAttachment.objects.create(
+                    comment=comment,
+                    file=f
+                )
 
-            # Topic is marked as read at once
-            TopicReadStatus.objects.update_or_create(
-                user=request.user,
-                topic=topic,
-                defaults={'last_read_at': timezone.now()}
-            )
+            # 👉 пользователь становится участником
+            topic.participants.add(request.user)
 
             return redirect(f'/topic/{topic.id}/')
 
     return render(request, 'comments/add_comment.html', {
         'form': form,
-        'topic': topic,
+        'topic': topic
     })

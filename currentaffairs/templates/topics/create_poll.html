@@ -1,40 +1,70 @@
 {% extends 'base.html' %}
 {% load i18n %}
-
 {% block content %}
 
-<div class="page-card p-4">
-
-<h3 class="mb-4">{% trans "New Poll" %}</h3>
+<h3>{% trans "New Poll" %}</h3>
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
-    {{ form.as_p }}
+    <div class="mb-3">
+        <label>{% trans "Question" %}</label>
+        {{ form.question }}
+    </div>
+
+    <!-- ✅ upload -->
+    <div class="mb-3">
+        <label>{% trans "Attachment" %}</label>
+
+        <input type="file"
+           name="file"
+           id="file-input"
+           class="d-none"
+           multiple>
+
+        <div id="drop-zone" class="drop-zone">
+            {% trans "Click or Drag file here" %}
+        </div>
+
+        <div id="preview-box" class="mt-2"></div>
+    </div>
+
+    <div class="mb-3">
+        {{ form.is_open }} {{ form.is_open.label_tag }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.is_anonymous }} {{ form.is_anonymous.label_tag }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.allow_multiple }} {{ form.allow_multiple.label_tag }}
+    </div>
+
+    <div class="mb-3">
+        <label>{% trans "Participants" %}</label>
+        {{ form.participants }}
+    </div>
 
     <hr>
 
-    <label class="form-label">{% trans "Options" %}</label>
+    <label>{% trans "Options" %}</label>
 
     <div id="options-container">
-        <input type="text"
-               name="options"
-               class="form-control mb-2">
+        <input type="text" name="options" class="form-control mb-2">
     </div>
 
     <button type="button"
             id="add-option"
-            class="btn btn-outline-secondary mb-3">
+            class="btn btn-secondary mb-3">
         {% trans "+ More option" %}
     </button>
 
-    <div>
-        <button class="btn btn-success">
-            {% trans "Save Poll" %}
-        </button>
-    </div>
-</form>
+    <br>
 
-</div>
+    <button class="btn btn-success">
+        {% trans "Save Poll" %}
+    </button>
+</form>
 
 {% endblock %}

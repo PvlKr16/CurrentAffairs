@@ -1,45 +1,52 @@
 {% load file_extras %}
 
 {% if file %}
+{% with file|ext as extension %}
 
-<div class="file-card mt-2">
+<div class="file-card mt-3">
 
-    {% with file|ext as extension %}
+    {% if extension in '.jpg,.jpeg,.png,.gif,.webp,.svg' %}
+        <a href="{{ file.url }}" target="_blank">
+            <img src="{{ file.url }}" class="file-thumb">
+        </a>
 
-        {% if extension in '.jpg,.jpeg,.png,.gif,.webp,.svg' %}
-            <a href="{{ file.url }}" target="_blank">
-                <img src="{{ file.url }}"
-                     class="file-thumb">
-            </a>
+    {% elif extension in '.mp4,.webm,.ogg,.mov' %}
+        <video class="file-video" controls preload="metadata">
+            <source src="{{ file.url }}">
+        </video>
 
-        {% elif extension == '.pdf' %}
-            <a href="{{ file.url }}" target="_blank"
-               class="file-icon">📄 PDF</a>
+    {% elif extension == '.pdf' %}
+        <a href="{{ file.url }}" target="_blank" class="file-icon">
+            📄 PDF
+        </a>
 
-        {% elif extension == '.doc' or extension == '.docx' %}
-            <a href="{{ file.url }}" target="_blank"
-               class="file-icon">📝 DOC</a>
+    {% elif extension == '.doc' or extension == '.docx' %}
+        <a href="{{ file.url }}" target="_blank" class="file-icon">
+            📝 DOC
+        </a>
 
-        {% elif extension == '.xls' or extension == '.xlsx' %}
-            <a href="{{ file.url }}" target="_blank"
-               class="file-icon">📊 XLS</a>
+    {% elif extension == '.xls' or extension == '.xlsx' %}
+        <a href="{{ file.url }}" target="_blank" class="file-icon">
+            📊 XLS
+        </a>
 
-        {% elif extension == '.zip' or extension == '.rar' %}
-            <a href="{{ file.url }}" target="_blank"
-               class="file-icon">🗜 ZIP</a>
+    {% elif extension == '.zip' or extension == '.rar' %}
+        <a href="{{ file.url }}" target="_blank" class="file-icon">
+            🗜 ZIP
+        </a>
 
-        {% else %}
-            <a href="{{ file.url }}" target="_blank"
-               class="file-icon">📎 File</a>
-        {% endif %}
+    {% else %}
+        <a href="{{ file.url }}" target="_blank" class="file-icon">
+            📎 FILE
+        </a>
+    {% endif %}
 
-    {% endwith %}
-
-    <div class="small mt-1">
-        {{ file|filename }}
-        ({{ file.size|filesizeformat }})
+    <div class="small mt-2">
+        <strong>{{ file|filename }}</strong><br>
+        {{ file.size|filesizeformat }}
     </div>
 
 </div>
 
+{% endwith %}
 {% endif %}

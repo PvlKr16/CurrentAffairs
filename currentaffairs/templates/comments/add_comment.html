@@ -1,27 +1,35 @@
 {% extends 'base.html' %}
 {% load i18n %}
+
 {% block content %}
 
 <h3>{% trans "Add comment" %}</h3>
 
-<form method="post"
-      enctype="multipart/form-data"
-      id="upload-form">
-
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
-    {{ form.title.label_tag }}
-    {{ form.title }}
+    <div class="mb-3">
+        {{ form.title.label_tag }}
+        {{ form.title }}
+    </div>
 
-    {{ form.content.label_tag }}
-    {{ form.content }}
+    <div class="mb-3">
+        {{ form.content.label_tag }}
+        {{ form.content }}
+    </div>
 
-    <div class="mb-3 mt-3">
+    <!-- ✅ ОДИН upload блок -->
+    <div class="mb-3">
         <label>{% trans "Attachment" %}</label>
-        {{ form.file }}
 
-        <div id="drop-zone" class="drop-zone mt-2">
-            {% trans "Drag & Drop file here" %}
+        <input type="file"
+           name="file"
+           id="file-input"
+           class="d-none"
+           multiple>
+
+        <div id="drop-zone" class="drop-zone">
+            {% trans "Click or Drag file here" %}
         </div>
 
         <div id="preview-box" class="mt-2"></div>
@@ -31,10 +39,10 @@
         {% trans "Save comment" %}
     </button>
 
-    <a href="/topic/{{ topic.id }}/"
-       class="btn btn-secondary">
+    <a href="/topic/{{ topic.id }}/" class="btn btn-secondary">
         {% trans "Cancel" %}
     </a>
+
 </form>
 
 {% endblock %}

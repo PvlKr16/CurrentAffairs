@@ -1,47 +1,87 @@
-document.addEventListener('DOMContentLoaded', function () {
-    let lang = document.documentElement.getAttribute('lang') || 'en';
-    lang = lang.slice(0, 2).toLowerCase();
+document.addEventListener("DOMContentLoaded", function () {
 
-    const i18n = {
-        be: { choose: 'Выберыце файл', empty: 'Файл не выбраны' },
-        en: { choose: 'Choose file', empty: 'No file selected' },
-        it: { choose: 'Scegli file', empty: 'Nessun file selezionato' },
-        lt: { choose: 'Pasirinkti failą', empty: 'Failas nepasirinktas' },
-        ru: { choose: 'Выберите файл', empty: 'Файл не выбран' },
-        ua: { choose: 'Оберіть файл', empty: 'Файл не вибрано' }
-    };
+    const dropZone = document.getElementById("drop-zone");
+    const fileInput = document.getElementById("file-input");
+    const previewBox = document.getElementById("preview-box");
 
-    const t = i18n[lang] || i18n.en;
+    if (!dropZone || !fileInput) return;
 
-    document.querySelectorAll('input[type="file"]').forEach(input => {
-        if (input.dataset.ready) return;
-        input.dataset.ready = '1';
+    let filesList = [];
 
-        input.classList.add('d-none');
+    // ---------------- CLICK ----------------
+    dropZone.addEventListener("click", () => fileInput.click());
 
-        const wrap = document.createElement('div');
-        wrap.className = 'd-flex align-items-center gap-2';
-
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'btn btn-outline-secondary btn-sm';
-        btn.textContent = t.choose;
-
-        const label = document.createElement('span');
-        label.className = 'small text-muted';
-        label.textContent = t.empty;
-
-        input.parentNode.insertBefore(wrap, input);
-        wrap.appendChild(btn);
-        wrap.appendChild(label);
-        wrap.appendChild(input);
-
-        btn.addEventListener('click', () => input.click());
-
-        input.addEventListener('change', function () {
-            label.textContent = input.files.length
-                ? input.files[0].name
-                : t.empty;
-        });
+    // ---------------- DRAG ----------------
+    dropZone.addEventListener("dragover", e => {
+        e.preventDefault();
+        dropZone.classList.add("dragover");
     });
+
+    dropZone.addEventListener("dragleave", () => {
+        dropZone.classList.remove("dragover");
+    });
+
+    dropZone.addEventListener("drop", e => {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+
+        addFiles(e.dataTransfer.files);
+    });
+
+    // ---------------- INPUT ----------------
+    fileInput.addEventListener("change", () => {
+        addFiles(fileInput.files);
+    });
+
+    // ---------------- CORE ----------------
+    function addFiles(newFiles) {
+        for (let file of newFiles) {
+            filesList.push(file);
+        }
+        syncInput();
+        renderPreview();
+    }
+
+    function removeFile(index) {
+        filesList.splice(index, 1);
+        syncInput();
+        renderPreview();
+    }
+
+    function syncInput() {
+        const dataTransfer = new DataTransfer();
+
+        filesList.forEach(file => dataTransfer.items.add(file));
+
+        fileInput.files = dataTransfer.files;
+    }
+
+    function renderPreview() {
+        previewBox.innerHTML = "";
+
+        filesList.forEach((file, index) => {
+
+            const el = document.createElement("div");
+            el.className = "file-card mb-2 p-2 border rounded d-flex justify-content-between align-items-center";
+
+            el.innerHTML = `
+                <div>
+                    <strong>${file.name}</strong><br>
+                    <small>${(file.size / 1024).toFixed(1)} KB</small>
+                </div>
+
+                <button type="button"
+                        class="btn btn-sm btn-danger">
+                    ✕
+                </button>
+            `;
+
+            el.querySelector("button").addEventListener("click", () => {
+                removeFile(index);
+            });
+
+            previewBox.appendChild(el);
+        });
+    }
+
 });

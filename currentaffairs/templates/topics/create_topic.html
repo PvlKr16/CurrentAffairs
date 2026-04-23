@@ -3,61 +3,59 @@
 
 {% block content %}
 
-<div class="page-card p-4">
+<h3>{% trans "Create Topic" %}</h3>
 
-<h3 class="mb-4">{% trans "Create Topic" %}</h3>
+<form method="post"
+      enctype="multipart/form-data"
+      id="upload-form">
 
-<form method="post" enctype="multipart/form-data" id="upload-form">
     {% csrf_token %}
 
     <div class="mb-3">
-        <label class="form-label">{% trans "Title" %}</label>
+        <label>{% trans "Title" %}</label>
         {{ form.title }}
     </div>
 
     <div class="mb-3">
-        <label class="form-label">{% trans "Description" %}</label>
+        <label>{% trans "Description" %}</label>
         {{ form.description }}
     </div>
 
     <div class="mb-3">
-        <label class="form-label">{% trans "Content" %}</label>
+        <label>{% trans "Content" %}</label>
         {{ form.content }}
     </div>
 
+    <!-- ✅ ЕДИНЫЙ upload блок -->
     <div class="mb-3">
-        <label class="form-label">{% trans "Attachment" %}</label>
-        {{ form.file }}
+        <label>{% trans "Attachment" %}</label>
 
-        <div id="drop-zone" class="drop-zone mt-2">
-            {% trans "Drag & Drop file here" %}
+        <input type="file"
+           name="file"
+           id="file-input"
+           class="d-none"
+           multiple>
+
+        <div id="drop-zone" class="drop-zone">
+            {% trans "Click or Drag file here" %}
         </div>
 
         <div id="preview-box" class="mt-2"></div>
     </div>
 
     <div class="mb-3">
-        <label class="form-label">{% trans "Visibility" %}</label>
+        <label>{% trans "Visibility" %}</label>
         {{ form.is_open }}
     </div>
 
-    <div class="mb-4">
-        <label class="form-label">{% trans "Participants" %}</label>
+    <div class="mb-3">
+        <label>{% trans "Participants" %}</label>
         {{ form.participants }}
     </div>
 
-    <div class="d-flex gap-2">
-        <button class="btn btn-success">
-            {% trans "Save" %}
-        </button>
-
-        <a href="/home/" class="btn btn-outline-secondary">
-            {% trans "Cancel" %}
-        </a>
-    </div>
+    <button class="btn btn-success">{% trans "Save" %}</button>
+    <a href="/home/" class="btn btn-secondary">{% trans "Cancel" %}</a>
 
 </form>
-
-</div>
 
 {% endblock %}

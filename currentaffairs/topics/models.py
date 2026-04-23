@@ -126,3 +126,29 @@ class PollReadStatus(models.Model):
 
     class Meta:
         unique_together = ('user', 'poll')
+
+
+class TopicAttachment(models.Model):
+    topic = models.ForeignKey(
+        Topic,
+        on_delete=models.CASCADE,
+        related_name='attachments'
+    )
+    file = models.FileField(upload_to='topics/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.file.name
+
+
+class PollAttachment(models.Model):
+    poll = models.ForeignKey(
+        Poll,
+        on_delete=models.CASCADE,
+        related_name='attachments'
+    )
+    file = models.FileField(upload_to='polls/')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.file.name

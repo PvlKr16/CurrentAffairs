@@ -10,10 +10,12 @@ from .forms import TopicCreateForm, PollForm
 from .models import (
     Topic,
     TopicReadStatus,
+    TopicAttachment,
     Poll,
     PollOption,
     PollVote,
     PollReadStatus,
+    PollAttachment
 )
 
 User = get_user_model()
@@ -39,14 +41,24 @@ def create_topic(request):
         if form.is_valid():
             topic = form.save(commit=False)
             topic.author = request.user
-            topic.save()
 
+            # ❗ отключаем старое поле file
+            topic.file = None
+
+            topic.save()
             form.save_m2m()
 
-            # Author is always participant
+            # Автор всегда участник
             topic.participants.add(request.user)
 
-            # Mark as read for author immediately
+            # ✅ СОХРАНЕНИЕ MULTIPLE FILES
+            files = request.FILES.getlist('file')
+            for f in files:
+                TopicAttachment.objects.create(
+                    topic=topic,
+                    file=f
+                )
+
             TopicReadStatus.objects.update_or_create(
                 user=request.user,
                 topic=topic,
@@ -282,14 +294,23 @@ def create_poll(request):
         if form.is_valid():
             poll = form.save(commit=False)
             poll.author = request.user
-            poll.save()
 
+            # ❗ отключаем старое поле
+            poll.file = None
+
+            poll.save()
             form.save_m2m()
 
-            # Author is always participant
             poll.participants.add(request.user)
 
-            # Mark as read for author immediately
+            # ✅ MULTIPLE FILES
+            files = request.FILES.getlist('file')
+            for f in files:
+                PollAttachment.objects.create(
+                    poll=poll,
+                    file=f
+                )
+
             PollReadStatus.objects.update_or_create(
                 user=request.user,
                 poll=poll,

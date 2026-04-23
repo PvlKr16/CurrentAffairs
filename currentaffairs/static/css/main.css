@@ -384,3 +384,51 @@ textarea {
         left: 0;
     }
 }
+
+/* =========================
+   FILE CARDS UPGRADE
+========================= */
+
+.file-card {
+    display: inline-block;
+    max-width: 260px;
+    padding: 12px;
+    border-radius: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 24px rgba(0,0,0,.06);
+}
+
+.file-thumb {
+    width: 220px;
+    max-width: 100%;
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+    transition: transform .2s ease;
+}
+
+.file-thumb:hover {
+    transform: scale(1.03);
+}
+
+.file-video {
+    width: 220px;
+    max-width: 100%;
+    border-radius: 12px;
+}
+
+.file-icon {
+    display: inline-block;
+    padding: 18px 22px;
+    border-radius: 12px;
+    background: rgba(0,0,0,.04);
+    text-decoration: none;
+    color: inherit;
+    font-weight: 600;
+}
+
+.file-icon:hover {
+    background: rgba(0,0,0,.08);
+}
+

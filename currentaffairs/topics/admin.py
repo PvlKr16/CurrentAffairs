@@ -8,12 +8,24 @@ from .models import (
     PollOption,
     PollVote,
     PollReadStatus,
+    TopicAttachment,
+    PollAttachment,
 )
 
 
-# ==================================================
-# TOPICS
-# ==================================================
+# ===================== ATTACHMENTS =====================
+
+class TopicAttachmentInline(admin.TabularInline):
+    model = TopicAttachment
+    extra = 0
+
+
+class PollAttachmentInline(admin.TabularInline):
+    model = PollAttachment
+    extra = 0
+
+
+# ===================== TOPICS =====================
 
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):
@@ -29,74 +41,38 @@ class TopicAdmin(admin.ModelAdmin):
         'open_link',
     )
 
-    list_filter = (
-        'is_open',
-        'created_at',
-    )
-
-    search_fields = (
-        'title',
-        'description',
-        'content',
-        'author__email',
-        'author__first_name',
-        'author__last_name',
-    )
-
+    list_filter = ('is_open', 'created_at')
+    search_fields = ('title', 'description', 'content', 'author__email')
     ordering = ('-created_at',)
-
     filter_horizontal = ('participants',)
 
-    readonly_fields = (
-        'created_at',
-        'updated_at',
-    )
+    inlines = [TopicAttachmentInline]
+
+    actions = ['clear_files']
+
+    def clear_files(self, request, queryset):
+        for obj in queryset:
+            if obj.file:
+                obj.file.delete(save=False)
+                obj.file = None
+                obj.save()
 
     def participants_count(self, obj):
         return obj.participants.count()
 
-    participants_count.short_description = 'Users'
-
     def comments_count(self, obj):
         return obj.comments.count()
-
-    comments_count.short_description = 'Comments'
 
     def has_file(self, obj):
         return bool(obj.file)
 
     has_file.boolean = True
-    has_file.short_description = 'File'
 
     def open_link(self, obj):
-        return format_html(
-            '<a href="/topic/{}/" target="_blank">Open</a>',
-            obj.id
-        )
-
-    open_link.short_description = 'View'
+        return format_html('<a href="/topic/{}/" target="_blank">Open</a>', obj.id)
 
 
-@admin.register(TopicReadStatus)
-class TopicReadStatusAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'user',
-        'topic',
-        'last_read_at',
-    )
-
-    search_fields = (
-        'user__email',
-        'topic__title',
-    )
-
-    ordering = ('-last_read_at',)
-
-
-# ==================================================
-# POLLS
-# ==================================================
+# ===================== POLLS =====================
 
 class PollOptionInline(admin.TabularInline):
     model = PollOption
@@ -110,107 +86,54 @@ class PollAdmin(admin.ModelAdmin):
         'short_question',
         'author',
         'is_open',
-        'is_anonymous',
-        'allow_multiple',
         'participants_count',
         'votes_count',
-        'completed',
         'has_file',
         'created_at',
         'open_link',
     )
 
-    list_filter = (
-        'is_open',
-        'is_anonymous',
-        'allow_multiple',
-        'created_at',
-    )
+    inlines = [PollOptionInline, PollAttachmentInline]
 
-    search_fields = (
-        'question',
-        'author__email',
-        'author__first_name',
-        'author__last_name',
-    )
+    actions = ['clear_files']
 
-    ordering = ('-created_at',)
-
-    filter_horizontal = ('participants',)
-
-    inlines = [PollOptionInline]
-
-    readonly_fields = ('created_at',)
+    def clear_files(self, request, queryset):
+        for obj in queryset:
+            if obj.file:
+                obj.file.delete(save=False)
+                obj.file = None
+                obj.save()
 
     def short_question(self, obj):
         return obj.question[:60]
 
-    short_question.short_description = 'Question'
-
     def participants_count(self, obj):
         return obj.participants.count()
 
-    participants_count.short_description = 'Users'
-
     def votes_count(self, obj):
         return obj.votes.count()
-
-    votes_count.short_description = 'Votes'
-
-    def completed(self, obj):
-        voters = obj.votes.values('user').distinct().count()
-        users = obj.participants.count()
-        return users > 0 and voters >= users
-
-    completed.boolean = True
 
     def has_file(self, obj):
         return bool(obj.file)
 
     has_file.boolean = True
-    has_file.short_description = 'File'
 
     def open_link(self, obj):
-        return format_html(
-            '<a href="/poll/{}/" target="_blank">Open</a>',
-            obj.id
-        )
+        return format_html('<a href="/poll/{}/" target="_blank">Open</a>', obj.id)
 
-    open_link.short_description = 'View'
 
+# ===================== VOTES =====================
 
 @admin.register(PollVote)
 class PollVoteAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'poll',
-        'option',
-        'user',
-        'created_at',
-    )
-
-    list_filter = ('created_at',)
-
-    search_fields = (
-        'poll__question',
-        'user__email',
-    )
-
-    ordering = ('-created_at',)
+    list_display = ('id', 'poll', 'option', 'user', 'created_at')
 
 
 @admin.register(PollReadStatus)
 class PollReadStatusAdmin(admin.ModelAdmin):
-    list_display = (
-        'id',
-        'user',
-        'poll',
-        'last_read_at',
-    )
+    list_display = ('id', 'user', 'poll', 'last_read_at')
 
-    search_fields = (
-        'user__email',
-        'poll__question',
-    )
 
-    ordering = ('-last_read_at',)
+@admin.register(TopicReadStatus)
+class TopicReadStatusAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'topic', 'last_read_at')
