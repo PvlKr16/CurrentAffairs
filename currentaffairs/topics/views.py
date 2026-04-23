@@ -95,6 +95,7 @@ def topic_detail(request, topic_id):
         'topic': topic,
         'comments': comments,
         'is_participant': is_participant,
+        'users': User.objects.exclude(id=request.user.id),
     })
 
 @login_required

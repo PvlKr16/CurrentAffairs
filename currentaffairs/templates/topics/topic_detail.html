@@ -54,21 +54,70 @@
     {% trans "Mark as unread" %}
 </a>
 
+<!--<hr>-->
+
+<!--<h6>{% trans "Participants" %} ({{ topic.participants.count }})</h6>-->
+
+<!--<div class="mb-3">-->
+<!--    {% for user in topic.participants.all %}-->
+<!--        <span class="badge bg-secondary me-1">-->
+<!--            {{ user.first_name|default:user.email }}-->
+<!--        </span>-->
+<!--    {% empty %}-->
+<!--        <span class="text-muted">-->
+<!--            {% trans "No participants yet" %}-->
+<!--        </span>-->
+<!--    {% endfor %}-->
+<!--</div>-->
+
 <hr>
 
-<h6>{% trans "Participants" %} ({{ topic.participants.count }})</h6>
+<h5>{% trans "Participants" %}</h5>
 
 <div class="mb-3">
     {% for user in topic.participants.all %}
         <span class="badge bg-secondary me-1">
-            {{ user.first_name|default:user.email }}
+            {{ user.first_name }} {{ user.last_name }}
         </span>
     {% empty %}
-        <span class="text-muted">
-            {% trans "No participants yet" %}
-        </span>
+        <p class="text-muted">{% trans "No participants" %}</p>
     {% endfor %}
 </div>
+
+{% if is_participant %}
+    <!-- ➕ ADD PARTICIPANT -->
+    <form method="post" action="/topic/{{ topic.id }}/add-user/" class="mb-3">
+        {% csrf_token %}
+
+        <div class="d-flex gap-2">
+            <select name="user_id" class="form-select">
+
+                {% for u in users %}
+                    {% if u not in topic.participants.all %}
+                        <option value="{{ u.id }}">
+                            {{ u.first_name }} {{ u.last_name }}
+                        </option>
+                    {% endif %}
+                {% endfor %}
+
+            </select>
+
+            <button class="btn btn-success">
+                {% trans "Add" %}
+            </button>
+        </div>
+    </form>
+
+    <!-- 🚪 LEAVE -->
+    {% if request.user != topic.author %}
+    <form method="post" action="/topic/{{ topic.id }}/leave/">
+        {% csrf_token %}
+        <button class="btn btn-outline-danger">
+            {% trans "Leave topic" %}
+        </button>
+    </form>
+    {% endif %}
+{% endif %}
 
 <hr>
 
