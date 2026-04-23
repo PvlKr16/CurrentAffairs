@@ -10,11 +10,12 @@ from .views import (
     view_poll,
     vote_poll,
     poll_results_api,
-
     add_topic_participant,
     leave_topic,
     add_poll_participant,
     leave_poll,
+    follow_topic,
+    unfollow_topic,
 )
 
 urlpatterns = [
@@ -36,4 +37,7 @@ urlpatterns = [
 
     path('poll/<int:poll_id>/add-user/', add_poll_participant),
     path('poll/<int:poll_id>/leave/', leave_poll),
+
+    path('topic/<int:topic_id>/follow/', follow_topic),
+    path('topic/<int:topic_id>/unfollow/', unfollow_topic),
 ]

@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.http import JsonResponse
 from django.utils import timezone
+from django.views.decorators.http import require_POST
 
 from comments.models import Comment
 from .forms import TopicCreateForm, PollForm
@@ -72,7 +73,6 @@ def create_topic(request):
     })
 
 
-@login_required
 def topic_detail(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
 
@@ -87,12 +87,44 @@ def topic_detail(request, topic_id):
         defaults={'last_read_at': timezone.now()}
     )
 
+    is_participant = topic.participants.filter(
+        id=request.user.id
+    ).exists()
+
     return render(request, 'topics/topic_detail.html', {
         'topic': topic,
         'comments': comments,
-        'users': User.objects.exclude(id=request.user.id),
+        'is_participant': is_participant,
     })
 
+@login_required
+@require_POST
+def follow_topic(request, topic_id):
+    topic = get_object_or_404(Topic, id=topic_id)
+
+    topic.participants.add(request.user)
+
+    TopicReadStatus.objects.update_or_create(
+        user=request.user,
+        topic=topic,
+        defaults={'last_read_at': timezone.now()}
+    )
+
+    return redirect(f'/topic/{topic.id}/')
+
+@login_required
+@require_POST
+def unfollow_topic(request, topic_id):
+    topic = get_object_or_404(Topic, id=topic_id)
+
+    topic.participants.remove(request.user)
+
+    TopicReadStatus.objects.filter(
+        user=request.user,
+        topic=topic
+    ).delete()
+
+    return redirect('/home/')
 
 @login_required
 def mark_unread(request, topic_id):
