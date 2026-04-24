@@ -76,6 +76,9 @@ def create_topic(request):
 def topic_detail(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
 
+    if request.user.is_guest and request.user not in topic.participants.all():
+        return redirect('/home/')
+
     if not topic.is_open and request.user not in topic.participants.all():
         return redirect('/home/')
 
@@ -103,6 +106,9 @@ def topic_detail(request, topic_id):
 def follow_topic(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
 
+    if request.user.is_guest:
+        return redirect('/home/')
+
     topic.participants.add(request.user)
 
     TopicReadStatus.objects.update_or_create(
@@ -117,6 +123,9 @@ def follow_topic(request, topic_id):
 @require_POST
 def unfollow_topic(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
+
+    if request.user == topic.author:
+        return redirect(f'/topic/{topic.id}/')
 
     topic.participants.remove(request.user)
 
@@ -372,6 +381,9 @@ def create_poll(request):
 def view_poll(request, poll_id):
     poll = get_object_or_404(Poll, id=poll_id)
 
+    if request.user.is_guest and request.user not in poll.participants.all():
+        return redirect('/home/')
+
     if not poll.is_open and request.user not in poll.participants.all():
         return redirect('/home/')
 
@@ -401,6 +413,12 @@ def view_poll(request, poll_id):
 @login_required
 def vote_poll(request, poll_id):
     poll = get_object_or_404(Poll, id=poll_id)
+
+    if request.user.is_guest:
+        return redirect('/home/')
+
+    if request.user not in poll.participants.all():
+        return redirect(f'/poll/{poll.id}/')
 
     if not poll.is_open and request.user not in poll.participants.all():
         return redirect('/home/')

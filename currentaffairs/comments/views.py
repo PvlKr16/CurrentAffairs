@@ -12,6 +12,12 @@ from topics.models import Topic, TopicReadStatus
 def add_comment(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
 
+    if request.user.is_guest and request.user not in topic.participants.all():
+        return redirect('/home/')
+
+    if not topic.is_open and request.user not in topic.participants.all():
+        return redirect('/home/')
+
     form = CommentForm(request.POST or None, request.FILES or None)
 
     if request.method == 'POST':
