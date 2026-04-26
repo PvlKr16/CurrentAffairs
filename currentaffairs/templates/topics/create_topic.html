@@ -3,59 +3,87 @@
 
 {% block content %}
 
-<h3>{% trans "Create Topic" %}</h3>
+<div class="page-card p-4 p-lg-5">
+    <h3 class="mb-4">{% trans "Create Topic" %}</h3>
 
-<form method="post"
-      enctype="multipart/form-data"
-      id="upload-form">
+    <form method="post"
+          enctype="multipart/form-data"
+          id="upload-form"
+          class="create-topic-form">
 
-    {% csrf_token %}
+        {% csrf_token %}
 
-    <div class="mb-3">
-        <label>{% trans "Title" %}</label>
-        {{ form.title }}
-    </div>
-
-    <div class="mb-3">
-        <label>{% trans "Description" %}</label>
-        {{ form.description }}
-    </div>
-
-    <div class="mb-3">
-        <label>{% trans "Content" %}</label>
-        {{ form.content }}
-    </div>
-
-    <!-- ✅ ЕДИНЫЙ upload блок -->
-    <div class="mb-3">
-        <label>{% trans "Attachment" %}</label>
-
-        <input type="file"
-           name="file"
-           id="file-input"
-           class="d-none"
-           multiple>
-
-        <div id="drop-zone" class="drop-zone">
-            {% trans "Click or Drag file here" %}
+        <!-- Title -->
+        <div class="mb-4">
+            <label class="form-label">{% trans "Title" %}</label>
+            {{ form.title }}
         </div>
 
-        <div id="preview-box" class="mt-2"></div>
-    </div>
+        <!-- Description -->
+        <div class="mb-4">
+            <label class="form-label">{% trans "Description" %}</label>
+            {{ form.description }}
+        </div>
 
-    <div class="mb-3">
-        <label>{% trans "Visibility" %}</label>
-        {{ form.is_open }}
-    </div>
+        <!-- Content -->
+        <div class="mb-4">
+            <label class="form-label">{% trans "Content" %}</label>
+            {{ form.content }}
+        </div>
 
-    <div class="mb-3">
-        <label>{% trans "Participants" %}</label>
-        {{ form.participants }}
-    </div>
+        <!-- Upload + Participants -->
+        <div class="row g-4 align-items-stretch mb-4">
 
-    <button class="btn btn-success">{% trans "Save" %}</button>
-    <a href="/home/" class="btn btn-secondary">{% trans "Cancel" %}</a>
+            <!-- Attachment -->
+            <div class="col-lg-6">
+                <label class="form-label d-block">
+                    {% trans "Attachment" %}
+                </label>
 
-</form>
+                <input type="file"
+                       name="file"
+                       id="file-input"
+                       class="d-none"
+                       multiple>
+
+                <div id="drop-zone" class="drop-zone square-drop-zone">
+                    {% trans "Click or Drag file here" %}
+                </div>
+
+                <div id="preview-box" class="mt-3"></div>
+            </div>
+
+            <!-- Participants -->
+            <div class="col-lg-6">
+                <label class="form-label">
+                    {% trans "Participants" %}
+                </label>
+
+                <div class="participants-box">
+                    {{ form.participants }}
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Visibility -->
+        <div class="mb-4">
+            <label class="form-label">{% trans "Visibility" %}</label>
+            {{ form.is_open }}
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex gap-2">
+            <button class="btn btn-success px-4">
+                {% trans "Save" %}
+            </button>
+
+            <a href="/home/" class="btn btn-secondary px-4">
+                {% trans "Cancel" %}
+            </a>
+        </div>
+
+    </form>
+</div>
 
 {% endblock %}

@@ -482,3 +482,111 @@ textarea {
     flex-wrap: wrap;
     gap: 10px;
 }
+
+/* =========================
+   CREATE TOPIC DESKTOP UI
+========================= */
+
+.create-topic-form {
+    max-width: 1100px;
+}
+
+.create-topic-form .form-label {
+    display: block;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+
+/* Title / Description / Content
+   на всю ширину блока:
+   от левого края upload
+   до правого края participants
+*/
+.create-topic-form input[type="text"],
+.create-topic-form textarea,
+.create-topic-form select {
+    width: 100%;
+    border-radius: 12px;
+}
+
+/* Title */
+.create-topic-form input[type="text"] {
+    min-height: 52px;
+}
+
+/* Description — ровно 2 строки */
+.create-topic-form textarea[name*="description"] {
+    min-height: 72px;
+    max-height: 72px;
+    resize: none;
+}
+
+/* Content — длинное большое поле */
+.create-topic-form textarea[name*="content"] {
+    min-height: 220px;
+    resize: vertical;
+}
+
+/* upload + participants */
+.square-drop-zone {
+    width: 320px;
+    height: 320px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    padding: 20px;
+    font-weight: 500;
+}
+
+.participants-box {
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+}
+
+.participants-box select,
+.participants-box textarea,
+.participants-box .form-control {
+    flex: 1;
+    height: 320px;
+    min-height: 320px;
+}
+
+/* красивее отступы */
+.page-card h3 {
+    font-weight: 700;
+    margin-bottom: 32px;
+}
+
+@media (min-width: 992px) {
+    .page-card {
+        padding: 42px !important;
+    }
+
+    /* главное исправление:
+       поля сверху растягиваются
+       на ширину upload + participants
+    */
+    .create-topic-form .mb-4:not(.row) {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 991px) {
+    .square-drop-zone {
+        width: 100%;
+        height: 220px;
+    }
+
+    .participants-box,
+    .participants-box select,
+    .participants-box textarea,
+    .participants-box .form-control {
+        height: auto;
+        min-height: auto;
+    }
+}
