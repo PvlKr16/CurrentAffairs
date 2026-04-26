@@ -1,3 +1,5 @@
 Django~=5.2.12
 djangorestframework~=3.17.1
 Pillow
+python-dotenv
+gunicorn
