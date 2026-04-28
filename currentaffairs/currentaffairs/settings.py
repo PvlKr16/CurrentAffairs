@@ -133,7 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = 'users.User'
 
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 
@@ -184,9 +184,18 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 if not DEBUG:
     SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
+
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    X_FRAME_OPTIONS = 'DENY'
+else:
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+
+
+SESSION_COOKIE_AGE = 1209600
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 
 # =========================
@@ -196,35 +205,59 @@ if not DEBUG:
 LOGS_DIR = BASE_DIR / "logs"
 LOGS_DIR.mkdir(exist_ok=True)
 
+# LOGGING = {
+#     "version": 1,
+#     "disable_existing_loggers": False,
+#
+#     "formatters": {
+#         "verbose": {
+#             "format": "{levelname} {asctime} {module} {message}",
+#             "style": "{",
+#         },
+#     },
+#
+#     "handlers": {
+#         "file": {
+#             "level": "WARNING",
+#             "class": "logging.FileHandler",
+#             "filename": LOGS_DIR / "django.log",
+#             "formatter": "verbose",
+#         },
+#     },
+#
+#     "loggers": {
+#         "django": {
+#             "handlers": ["file"],
+#             "level": "WARNING",
+#             "propagate": True,
+#         },
+#     },
+# }
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
-
-    "formatters": {
-        "verbose": {
-            "format": "{levelname} {asctime} {module} {message}",
-            "style": "{",
-        },
-    },
-
     "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
         "file": {
-            "level": "WARNING",
+            "level": "DEBUG",
             "class": "logging.FileHandler",
             "filename": LOGS_DIR / "django.log",
-            "formatter": "verbose",
         },
     },
-
     "loggers": {
-        "django": {
-            "handlers": ["file"],
-            "level": "WARNING",
-            "propagate": True,
+        "django.contrib.sessions": {
+            "handlers": ["file", "console"],
+            "level": "DEBUG",
+        },
+        "django.security": {
+            "handlers": ["file", "console"],
+            "level": "DEBUG",
         },
     },
 }
-
 
 # =========================
 # DEFAULT PK

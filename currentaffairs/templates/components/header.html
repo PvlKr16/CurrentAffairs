@@ -61,6 +61,8 @@
 
         <ul class="navbar-nav ms-auto align-items-center">
 
+            {% if not request.user.is_guest %}
+
             <!-- Contacts -->
             <li class="nav-item">
                 <a class="nav-link" href="/contacts/">
@@ -93,6 +95,8 @@
                 </ul>
             </li>
 
+            {% endif %}
+
             <!-- Profile -->
             <li class="nav-item">
                 <a class="nav-link"
@@ -118,10 +122,16 @@
 
             <!-- Logout -->
             <li class="nav-item">
-                <a class="nav-link"
-                   href="/logout/">
-                    {% trans "Logout" %}
-                </a>
+                <form method="post"
+                      action="/logout/"
+                      class="d-inline">
+                    {% csrf_token %}
+
+                    <button type="submit"
+                            class="nav-link btn btn-link p-0 border-0">
+                        {% trans "Logout" %}
+                    </button>
+                </form>
             </li>
 
             <!-- Settings -->

@@ -24,6 +24,7 @@ def login_view(request):
     return render(request, 'users/login.html', {'form': form})
 
 
+@require_POST
 def logout_view(request):
     logout(request)
     return redirect('/login/')

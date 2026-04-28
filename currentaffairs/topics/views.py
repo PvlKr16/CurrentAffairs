@@ -73,6 +73,7 @@ def create_topic(request):
     })
 
 
+@login_required
 def topic_detail(request, topic_id):
     topic = get_object_or_404(Topic, id=topic_id)
 
@@ -277,9 +278,7 @@ def search_topics(request):
     if user.is_guest:
         topics = Topic.objects.filter(participants=user)
     else:
-        topics = Topic.objects.filter(
-            Q(is_open=True) | Q(participants=user)
-        ).distinct()
+        topics = Topic.objects.filter(Q(is_open=True) | Q(participants=user)).distinct()
 
     filters = Q()
 

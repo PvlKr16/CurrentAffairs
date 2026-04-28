@@ -567,10 +567,6 @@ textarea {
         padding: 42px !important;
     }
 
-    /* главное исправление:
-       поля сверху растягиваются
-       на ширину upload + participants
-    */
     .create-topic-form .mb-4:not(.row) {
         max-width: 100%;
     }
