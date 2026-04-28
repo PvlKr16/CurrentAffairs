@@ -9,15 +9,42 @@
 
     <div class="card p-3 mb-3">
 
-        {% if item.type == 'topic' %}
-            <a href="/topic/{{ item.obj.id }}/">
-                <strong>{{ item.title }}</strong>
-            </a>
-        {% else %}
-            <a href="/poll/{{ item.obj.id }}/">
-                <strong>{{ item.title }}</strong>
-            </a>
-        {% endif %}
+        <div class="d-flex justify-content-between align-items-center">
+
+            <div>
+                {% if item.type == 'topic' %}
+                    <a href="/topic/{{ item.obj.id }}/">
+                        <strong>{{ item.title }}</strong>
+                    </a>
+                {% else %}
+                    <a href="/poll/{{ item.obj.id }}/">
+                        <strong>{{ item.title }}</strong>
+                    </a>
+                {% endif %}
+            </div>
+
+            <div class="d-flex align-items-center gap-2">
+
+                {% if item.obj.author.avatar %}
+                    <img
+                        src="{{ item.obj.author.avatar.url }}"
+                        alt="avatar"
+                        style="
+                            width: 32px;
+                            height: 32px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                        "
+                    >
+                {% endif %}
+
+                <span class="small text-muted">
+                    {{ item.obj.author.first_name }} {{ item.obj.author.last_name }}
+                </span>
+
+            </div>
+
+        </div>
 
         <div class="small text-muted mt-2">
             {{ item.updated|date:"Y-m-d H:i" }}
