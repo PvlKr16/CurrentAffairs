@@ -1,9 +1,11 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from .managers import CustomUserManager
 from django.utils.translation import gettext_lazy as _
 
 
 class User(AbstractUser):
+    objects = CustomUserManager()
     email = models.EmailField(unique=True)
 
     is_guest = models.BooleanField(default=False)
