@@ -1,1 +1,1 @@
-# CurrentAffairs
+blogs webapp with Django
